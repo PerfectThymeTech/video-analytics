@@ -50,7 +50,6 @@ variable "function_health_check_path" {
   description = "Specifies the function app health check path."
   type        = string
   sensitive   = false
-  default     = "/api/v1/health"
   validation {
     condition     = length(var.function_health_check_path) >= 2
     error_message = "Please specify a prefix with more than two and less than 10 characters."
