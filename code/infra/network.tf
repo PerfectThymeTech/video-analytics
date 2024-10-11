@@ -53,6 +53,6 @@ resource "azapi_resource" "subnet_private_endpoints" {
   })
 
   depends_on = [
-    azapi_resource.subnet_web_app
+    azapi_resource.subnet_function,
   ]
 }
