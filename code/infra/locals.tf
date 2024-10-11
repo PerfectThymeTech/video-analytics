@@ -35,8 +35,10 @@ locals {
     NEWSTAGEXTRACTION_USER_PROMPT      = ""
 
     # Storage settings
-    STORAGE_DOMAIN_NAME    = module.cosmosdb_account.cosmosdb_account_endpoint
-    STORAGE_CONTAINER_NAME = module.cosmosdb_account.cosmosdb_account_primary_key
+    STORAGE_DOMAIN_NAME             = module.storage_account.storage_account_primary_blob_endpoint
+    STORAGE_CONTAINER_INTERNAL_NAME = local.storage_account_container_internal_name
+    STORAGE_CONTAINER_UPLOAD_NAME   = local.storage_account_container_upload_name
+    STORAGE_CONTAINER_RESULTS_NAME  = local.storage_account_container_results_name
   }
   function_app_settings = merge(local.app_settings_default, var.function_app_settings)
 
@@ -71,6 +73,9 @@ locals {
   customer_managed_key = null
 
   # Other locals
-  system_prompt_code_path = "${path.module}/../../docs/SystemPrompt.txt"
-  user_prompt_code_path   = "${path.module}/../../docs/UserPrompt.txt"
+  system_prompt_code_path                 = "${path.module}/../../docs/SystemPrompt.txt"
+  user_prompt_code_path                   = "${path.module}/../../docs/UserPrompt.txt"
+  storage_account_container_upload_name   = "newsvideos-upload"
+  storage_account_container_internal_name = "newsvideos-internal"
+  storage_account_container_results_name  = "newsvideos-results"
 }
