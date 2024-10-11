@@ -171,5 +171,3 @@ __azurite_db*__.json
 
 # VSCode artifacts
 .vscode/
-
-/archive/*
