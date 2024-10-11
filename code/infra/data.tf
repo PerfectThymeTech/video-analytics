@@ -26,6 +26,6 @@ data "local_file" "file_system_prompt" {
   filename = local.system_prompt_code_path
 }
 
-data "local_file" "file_system_prompt" {
+data "local_file" "file_user_prompt" {
   filename = local.user_prompt_code_path
 }
