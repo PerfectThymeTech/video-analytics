@@ -60,3 +60,61 @@ resource "azurerm_linux_function_app" "linux_function_app" {
     worker_count = 1
   }
 }
+
+data "azurerm_monitor_diagnostic_categories" "diagnostic_categories_linux_function_app" {
+  resource_id = azurerm_linux_function_app.linux_function_app.id
+}
+
+resource "azurerm_monitor_diagnostic_setting" "diagnostic_setting_linux_function_app" {
+  name                       = "logAnalytics"
+  target_resource_id         = azurerm_linux_function_app.linux_function_app.id
+  log_analytics_workspace_id = data.azurerm_log_analytics_workspace.log_analytics_workspace.id
+
+  dynamic "enabled_log" {
+    iterator = entry
+    for_each = data.azurerm_monitor_diagnostic_categories.diagnostic_categories_linux_function_app.log_category_groups
+    content {
+      category_group = entry.value
+    }
+  }
+
+  dynamic "metric" {
+    iterator = entry
+    for_each = data.azurerm_monitor_diagnostic_categories.diagnostic_categories_linux_function_app.metrics
+    content {
+      category = entry.value
+      enabled  = true
+    }
+  }
+}
+
+resource "azurerm_private_endpoint" "linux_function_app_private_endpoint" {
+  name                = "${azurerm_linux_function_app.linux_function_app.name}-pe"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.resource_group.name
+  tags                = var.tags
+
+  custom_network_interface_name = "${azurerm_linux_function_app.linux_function_app.name}-nic"
+  private_service_connection {
+    name                           = "${azurerm_linux_function_app.linux_function_app.name}-pe"
+    is_manual_connection           = false
+    private_connection_resource_id = azurerm_linux_function_app.linux_function_app.id
+    subresource_names              = ["sites"]
+  }
+  subnet_id = azapi_resource.subnet_private_endpoints.id
+  dynamic "private_dns_zone_group" {
+    for_each = var.private_dns_zone_id_sites == "" ? [] : [1]
+    content {
+      name = "${azurerm_linux_function_app.linux_function_app.name}-arecord"
+      private_dns_zone_ids = [
+        var.private_dns_zone_id_sites
+      ]
+    }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      private_dns_zone_group
+    ]
+  }
+}
