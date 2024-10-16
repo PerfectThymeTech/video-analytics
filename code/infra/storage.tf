@@ -29,7 +29,7 @@ module "storage_account" {
   storage_nfsv3_enabled                 = false
   storage_sftp_enabled                  = false
   storage_shared_access_key_enabled     = false # Required to be set to 'true' when creating a Windows host
-  storage_container_names               = [local.storage_account_container_upload_name, local.storage_account_container_internal_name, local.storage_account_container_results_name]
+  storage_container_names               = [local.storage_account_container_upload_name, local.storage_account_container_internal_videos_name, local.storage_account_container_internal_analysis_name, local.storage_account_container_results_name,]
   storage_static_website                = []
   diagnostics_configurations            = local.diagnostics_configurations
   subnet_id                             = azapi_resource.subnet_private_endpoints.id
