@@ -12,7 +12,7 @@ module "azure_open_ai" {
   cognitive_account_name                                  = "${local.prefix}-aoai001"
   cognitive_account_kind                                  = "OpenAI"
   cognitive_account_sku                                   = "S0"
-  cognitive_account_firewall_bypass_azure_services        = false
+  cognitive_account_firewall_bypass_azure_services        = true
   cognitive_account_outbound_network_access_restricted    = true
   cognitive_account_outbound_network_access_allowed_fqdns = []
   cognitive_account_deployments                           = {}

@@ -1,8 +1,9 @@
 # General variables
-location        = "northeurope"
-location_openai = "swedencentral"
-environment     = "dev"
-prefix          = "vdnlytcs"
+location           = "northeurope"
+location_openai    = "swedencentral"
+location_aiservice = "eastus"
+environment        = "dev"
+prefix             = "vdnlytcs"
 tags = {
   workload = "video-analytics"
 }
