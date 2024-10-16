@@ -11,6 +11,12 @@ variable "location_openai" {
   sensitive   = false
 }
 
+variable "location_aiservice" {
+  description = "Specifies the location for the generic Azure AI service."
+  type        = string
+  sensitive   = false
+}
+
 variable "environment" {
   description = "Specifies the environment of the deployment."
   type        = string
