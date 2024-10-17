@@ -23,7 +23,8 @@ module "storage_account" {
   storage_is_hns_enabled                          = false
   storage_network_bypass                          = ["None"]
   storage_network_private_link_access = [
-    "/subscriptions/${data.azurerm_client_config.current.subscription_id}/providers/Microsoft.Security/datascanners/storageDataScanner"
+    "/subscriptions/${data.azurerm_client_config.current.subscription_id}/providers/Microsoft.Security/datascanners/storageDataScanner",
+    "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/*/providers/Microsoft.CognitiveServices/accounts/*",
   ]
   storage_public_network_access_enabled = false
   storage_nfsv3_enabled                 = false
