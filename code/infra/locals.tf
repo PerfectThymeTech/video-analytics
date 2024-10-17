@@ -27,6 +27,10 @@ locals {
     AZURE_AI_SERVICE_BASE_URL    = module.azure_ai_generic.cognitive_account_endpoint
     AZURE_AI_SERVICE_API_VERSION = "2024-05-01-preview"
 
+    # Azure AI Service config
+    AZURE_AI_SPEECH_BASE_URL    = module.azure_ai_speech.cognitive_account_endpoint
+    AZURE_AI_SPEECH_API_VERSION = "v3.2-preview.1"
+
     # Azure open ai app settings
     AZURE_OPEN_AI_BASE_URL        = module.azure_open_ai.cognitive_account_endpoint
     AZURE_OPEN_AI_API_VERSION     = "2024-05-01-preview"
@@ -34,9 +38,9 @@ locals {
     AZURE_OPEN_AI_TEMPERATURE     = "0.0"
 
     # Newstagextraction settings
-    NEWSTAGEXTRACTION_ROOT_FOLDER_NAME = "newstagextraction"
-    NEWSTAGEXTRACTION_SYSTEM_PROMPT    = data.local_file.file_system_prompt.content
-    NEWSTAGEXTRACTION_USER_PROMPT      = data.local_file.file_user_prompt.content
+    ROOT_FOLDER_NAME = "newstagextraction"
+    SYSTEM_PROMPT    = data.local_file.file_system_prompt.content
+    USER_PROMPT      = data.local_file.file_user_prompt.content
 
     # Storage settings
     STORAGE_DOMAIN_NAME                             = module.storage_account.storage_account_primary_blob_endpoint

@@ -21,28 +21,44 @@ class Settings(BaseSettings):
         default="", alias="APPLICATIONINSIGHTS_CONNECTION_STRING"
     )
 
+    # Azure AI Service config
+    AZURE_AI_SERVICE_BASE_URL: str = "https://durable-aoai001.openai.azure.com/"
+    AZURE_AI_SERVICE_API_VERSION: str = "2024-05-01-preview"
+
+    # Azure AI Service config
+    AZURE_AI_SPEECH_BASE_URL: str = ""
+    AZURE_AI_SPEECH_API_VERSION: str = "v3.2-preview.1"
+
+    # Azure Open AI config
+    AZURE_OPEN_AI_BASE_URL: str = "https://durable-aoai001.openai.azure.com/"
+    AZURE_OPEN_AI_API_VERSION: str = "2024-02-15-preview"
+    AZURE_OPEN_AI_DEPLOYMENT_NAME: str = "gpt-4o"
+    AZURE_OPEN_AI_TEMPERATURE: float = 0.0
+
     # Storage config
     STORAGE_DOMAIN_NAME: str = Field(
         default="rgdurablefunctiona8c3.blob.core.windows.net",
         alias="STORAGE_DOMAIN_NAME",
     )
-    STORAGE_CONTAINER_NAME: str = Field(
-        default="video", alias="STORAGE_CONTAINER_NAME", min_length=3, max_length=63
+    STORAGE_CONTAINER_UPLOAD_NAME: str = Field(
+        default="upload-newsvideos", alias="STORAGE_CONTAINER_UPLOAD_NAME", min_length=3, max_length=63
+    )
+    STORAGE_CONTAINER_INTERNAL_VIDEOS_NAME: str = Field(
+        default="internal-videos", alias="STORAGE_CONTAINER_INTERNAL_VIDEOS_NAME", min_length=3, max_length=63
+    )
+    STORAGE_CONTAINER_INTERNAL_ANALYSIS_SPEECH_NAME: str = Field(
+        default="internal-analysis-speech", alias="STORAGE_CONTAINER_INTERNAL_ANALYSIS_SPEECH_NAME", min_length=3, max_length=63
+    )
+    STORAGE_CONTAINER_INTERNAL_ANALYSIS_VIDEO_NAME: str = Field(
+        default="internal-analysis-video", alias="STORAGE_CONTAINER_INTERNAL_ANALYSIS_VIDEO_NAME", min_length=3, max_length=63
+    )
+    STORAGE_CONTAINER_RESULTS_NAME: str = Field(
+        default="results-newsvideos", alias="STORAGE_CONTAINER_RESULTS_NAME", min_length=3, max_length=63
     )
 
-    # Azure AI Service config
-    AZURE_AI_SERVICE_BASE_URL: str = "https://durable-aoai001.openai.azure.com/"
-    AZURE_AI_SERVICE_API_VERSION: str = "2024-05-01-preview"
-
-    # Azure Open AI config
-    AZURE_OPEN_AI_BASE_URL: str = "https://durable-aoai001.openai.azure.com/"
-    AZURE_OPEN_AI_API_VERSION: str = "2024-02-15-preview"
-    AZURE_OPEN_AI_DEPLOYMENT_NAME: str = "gpt-4"
-    AZURE_OPEN_AI_TEMPERATURE: float = 0.0
-
     # News tag extraction config
-    NEWSTAGEXTRACTION_ROOT_FOLDER_NAME: str = "newstagextraction"
-    NEWSTAGEXTRACTION_SYSTEM_PROMPT: str = """
+    ROOT_FOLDER_NAME: str = "newstagextraction"
+    SYSTEM_PROMPT: str = """
     You are a world class assistant for identifying news sections.
     Do the following with the provided news content and provide a valid JSON response that uses the schema mentioned below:
     1. Split the provided news content into broad thematic sections. The content of each section must cover a common news topic, whereas each section must comply with the following rules:
@@ -62,7 +78,7 @@ class Settings(BaseSettings):
     Here is a sample JSON response:
     {format_sample}
     """
-    NEWSTAGEXTRACTION_USER_PROMPT: str = """
+    USER_PROMPT: str = """
     News Content: "{news_content}"
     ---
     Identify news sections for the provided news text according to the instructions. The text is from the following tv show: {news_show_details}
