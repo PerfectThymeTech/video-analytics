@@ -24,7 +24,7 @@ locals {
     WEBSITE_CONTENTOVERVNET                    = "1"
 
     # Azure ai service settings
-    AZURE_AI_SERVICE_BASE_URL = module.azure_ai_generic.cognitive_account_endpoint
+    AZURE_AI_SERVICE_BASE_URL    = module.azure_ai_generic.cognitive_account_endpoint
     AZURE_AI_SERVICE_API_VERSION = "2024-05-01-preview"
 
     # Azure open ai app settings
