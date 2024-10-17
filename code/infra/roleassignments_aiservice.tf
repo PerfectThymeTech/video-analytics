@@ -8,7 +8,7 @@ resource "azurerm_role_assignment" "cognitive_account_roleassignment_storage_blo
 
 resource "azurerm_role_assignment" "cognitive_account_roleassignment_storage_blob_data_contributor" {
   description          = "Required for writing to the storage account from the ai service."
-  scope                = "${module.storage_account.storage_account_id}/containers/${local.storage_account_container_internal_analysis_name}"
+  scope                = "${module.storage_account.storage_account_id}/containers/${local.storage_account_container_internal_analysis_video_name}"
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = module.azure_ai_generic.cognitive_account_principal_id
   principal_type       = "ServicePrincipal"

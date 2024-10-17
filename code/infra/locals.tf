@@ -27,6 +27,10 @@ locals {
     AZURE_AI_SERVICE_BASE_URL    = module.azure_ai_generic.cognitive_account_endpoint
     AZURE_AI_SERVICE_API_VERSION = "2024-05-01-preview"
 
+    # Azure AI Service config
+    AZURE_AI_SPEECH_BASE_URL    = module.azure_ai_speech.cognitive_account_endpoint
+    AZURE_AI_SPEECH_API_VERSION = "v3.2-preview.1"
+
     # Azure open ai app settings
     AZURE_OPEN_AI_BASE_URL        = module.azure_open_ai.cognitive_account_endpoint
     AZURE_OPEN_AI_API_VERSION     = "2024-05-01-preview"
@@ -34,16 +38,17 @@ locals {
     AZURE_OPEN_AI_TEMPERATURE     = "0.0"
 
     # Newstagextraction settings
-    NEWSTAGEXTRACTION_ROOT_FOLDER_NAME = "newstagextraction"
-    NEWSTAGEXTRACTION_SYSTEM_PROMPT    = data.local_file.file_system_prompt.content
-    NEWSTAGEXTRACTION_USER_PROMPT      = data.local_file.file_user_prompt.content
+    ROOT_FOLDER_NAME = "newstagextraction"
+    SYSTEM_PROMPT    = data.local_file.file_system_prompt.content
+    USER_PROMPT      = data.local_file.file_user_prompt.content
 
     # Storage settings
-    STORAGE_DOMAIN_NAME                      = module.storage_account.storage_account_primary_blob_endpoint
-    STORAGE_CONTAINER_UPLOAD_NAME            = local.storage_account_container_upload_name
-    STORAGE_CONTAINER_INTERNAL_VIDEOS_NAME   = local.storage_account_container_internal_videos_name
-    STORAGE_CONTAINER_INTERNAL_ANALYSIS_NAME = local.storage_account_container_internal_analysis_name
-    STORAGE_CONTAINER_RESULTS_NAME           = local.storage_account_container_results_name
+    STORAGE_DOMAIN_NAME                             = module.storage_account.storage_account_primary_blob_endpoint
+    STORAGE_CONTAINER_UPLOAD_NAME                   = local.storage_account_container_upload_name
+    STORAGE_CONTAINER_INTERNAL_VIDEOS_NAME          = local.storage_account_container_internal_videos_name
+    STORAGE_CONTAINER_INTERNAL_ANALYSIS_SPEECH_NAME = local.storage_account_container_internal_analysis_speech_name
+    STORAGE_CONTAINER_INTERNAL_ANALYSIS_VIDEO_NAME  = local.storage_account_container_internal_analysis_video_name
+    STORAGE_CONTAINER_RESULTS_NAME                  = local.storage_account_container_results_name
   }
   function_app_settings = merge(local.app_settings_default, var.function_app_settings)
 
@@ -78,10 +83,11 @@ locals {
   customer_managed_key = null
 
   # Other locals
-  system_prompt_code_path                          = "${path.module}/../../docs/SystemPrompt.txt"
-  user_prompt_code_path                            = "${path.module}/../../docs/UserPrompt.txt"
-  storage_account_container_upload_name            = "upload-newsvideos"
-  storage_account_container_internal_videos_name   = "internal-videos"
-  storage_account_container_internal_analysis_name = "internal-analysis"
-  storage_account_container_results_name           = "results-newsvideos"
+  system_prompt_code_path                                 = "${path.module}/../../docs/SystemPrompt.txt"
+  user_prompt_code_path                                   = "${path.module}/../../docs/UserPrompt.txt"
+  storage_account_container_upload_name                   = "upload-newsvideos"
+  storage_account_container_internal_videos_name          = "internal-videos"
+  storage_account_container_internal_analysis_speech_name = "internal-analysis-speech"
+  storage_account_container_internal_analysis_video_name  = "internal-analysis-video"
+  storage_account_container_results_name                  = "results-newsvideos"
 }
