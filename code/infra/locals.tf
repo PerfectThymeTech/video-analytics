@@ -39,11 +39,12 @@ locals {
     NEWSTAGEXTRACTION_USER_PROMPT      = data.local_file.file_user_prompt.content
 
     # Storage settings
-    STORAGE_DOMAIN_NAME                      = module.storage_account.storage_account_primary_blob_endpoint
-    STORAGE_CONTAINER_UPLOAD_NAME            = local.storage_account_container_upload_name
-    STORAGE_CONTAINER_INTERNAL_VIDEOS_NAME   = local.storage_account_container_internal_videos_name
-    STORAGE_CONTAINER_INTERNAL_ANALYSIS_NAME = local.storage_account_container_internal_analysis_name
-    STORAGE_CONTAINER_RESULTS_NAME           = local.storage_account_container_results_name
+    STORAGE_DOMAIN_NAME                             = module.storage_account.storage_account_primary_blob_endpoint
+    STORAGE_CONTAINER_UPLOAD_NAME                   = local.storage_account_container_upload_name
+    STORAGE_CONTAINER_INTERNAL_VIDEOS_NAME          = local.storage_account_container_internal_videos_name
+    STORAGE_CONTAINER_INTERNAL_ANALYSIS_SPEECH_NAME = local.storage_account_container_internal_analysis_speech_name
+    STORAGE_CONTAINER_INTERNAL_ANALYSIS_VIDEO_NAME  = local.storage_account_container_internal_analysis_video_name
+    STORAGE_CONTAINER_RESULTS_NAME                  = local.storage_account_container_results_name
   }
   function_app_settings = merge(local.app_settings_default, var.function_app_settings)
 
@@ -78,10 +79,11 @@ locals {
   customer_managed_key = null
 
   # Other locals
-  system_prompt_code_path                          = "${path.module}/../../docs/SystemPrompt.txt"
-  user_prompt_code_path                            = "${path.module}/../../docs/UserPrompt.txt"
-  storage_account_container_upload_name            = "upload-newsvideos"
-  storage_account_container_internal_videos_name   = "internal-videos"
-  storage_account_container_internal_analysis_name = "internal-analysis"
-  storage_account_container_results_name           = "results-newsvideos"
+  system_prompt_code_path                                 = "${path.module}/../../docs/SystemPrompt.txt"
+  user_prompt_code_path                                   = "${path.module}/../../docs/UserPrompt.txt"
+  storage_account_container_upload_name                   = "upload-newsvideos"
+  storage_account_container_internal_videos_name          = "internal-videos"
+  storage_account_container_internal_analysis_speech_name = "internal-analysis-speech"
+  storage_account_container_internal_analysis_video_name  = "internal-analysis-video"
+  storage_account_container_results_name                  = "results-newsvideos"
 }
