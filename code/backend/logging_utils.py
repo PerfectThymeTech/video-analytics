@@ -1,10 +1,8 @@
 import logging
 
 from azure.monitor.opentelemetry import configure_azure_monitor
-from core.config import settings
+from shared.config import settings
 from opentelemetry import trace
-from opentelemetry.instrumentation.aiohttp_client import AioHttpClientInstrumentor
-from opentelemetry.instrumentation.aiohttp_server import AioHttpServerInstrumentor
 from opentelemetry.sdk.resources import Resource
 
 
@@ -41,10 +39,6 @@ def enable_logging() -> None:
         logger_name=settings.PROJECT_NAME,
         enable_live_metrics=True,
     )
-
-    # Enable additional instrumentation
-    AioHttpClientInstrumentor().instrument()
-    AioHttpServerInstrumentor().instrument()
 
 
 def get_logger(name: str) -> logging.Logger:

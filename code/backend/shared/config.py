@@ -6,10 +6,20 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     # General config
-    PROJECT_NAME: str = "DurableFunctionOrchestrator"
+    PROJECT_NAME: str = "VideoAnalyzer"
+    SERVER_NAME: str = "VideoAnalyzer"
     APP_VERSION: str = "v0.0.1"
     LOGGING_LEVEL: int = logging.INFO
+    WEBSITE_NAME: str = Field(default="test", alias="WEBSITE_SITE_NAME")
+    WEBSITE_INSTANCE_ID: str = Field(default="0", alias="WEBSITE_INSTANCE_ID")
     HOME_DIRECTORY: str = Field(default="", alias="HOME")
+
+    # Logging settings
+    LOGGING_LEVEL: int = logging.DEBUG
+    DEBUG: bool = True
+    APPLICATIONINSIGHTS_CONNECTION_STRING: str = Field(
+        default="", alias="APPLICATIONINSIGHTS_CONNECTION_STRING"
+    )
 
     # Storage config
     STORAGE_DOMAIN_NAME: str = Field(
