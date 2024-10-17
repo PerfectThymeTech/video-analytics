@@ -41,19 +41,34 @@ class Settings(BaseSettings):
         alias="STORAGE_DOMAIN_NAME",
     )
     STORAGE_CONTAINER_UPLOAD_NAME: str = Field(
-        default="upload-newsvideos", alias="STORAGE_CONTAINER_UPLOAD_NAME", min_length=3, max_length=63
+        default="upload-newsvideos",
+        alias="STORAGE_CONTAINER_UPLOAD_NAME",
+        min_length=3,
+        max_length=63,
     )
     STORAGE_CONTAINER_INTERNAL_VIDEOS_NAME: str = Field(
-        default="internal-videos", alias="STORAGE_CONTAINER_INTERNAL_VIDEOS_NAME", min_length=3, max_length=63
+        default="internal-videos",
+        alias="STORAGE_CONTAINER_INTERNAL_VIDEOS_NAME",
+        min_length=3,
+        max_length=63,
     )
     STORAGE_CONTAINER_INTERNAL_ANALYSIS_SPEECH_NAME: str = Field(
-        default="internal-analysis-speech", alias="STORAGE_CONTAINER_INTERNAL_ANALYSIS_SPEECH_NAME", min_length=3, max_length=63
+        default="internal-analysis-speech",
+        alias="STORAGE_CONTAINER_INTERNAL_ANALYSIS_SPEECH_NAME",
+        min_length=3,
+        max_length=63,
     )
     STORAGE_CONTAINER_INTERNAL_ANALYSIS_VIDEO_NAME: str = Field(
-        default="internal-analysis-video", alias="STORAGE_CONTAINER_INTERNAL_ANALYSIS_VIDEO_NAME", min_length=3, max_length=63
+        default="internal-analysis-video",
+        alias="STORAGE_CONTAINER_INTERNAL_ANALYSIS_VIDEO_NAME",
+        min_length=3,
+        max_length=63,
     )
     STORAGE_CONTAINER_RESULTS_NAME: str = Field(
-        default="results-newsvideos", alias="STORAGE_CONTAINER_RESULTS_NAME", min_length=3, max_length=63
+        default="results-newsvideos",
+        alias="STORAGE_CONTAINER_RESULTS_NAME",
+        min_length=3,
+        max_length=63,
     )
 
     # News tag extraction config

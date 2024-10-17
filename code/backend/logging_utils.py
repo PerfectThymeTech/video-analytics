@@ -1,9 +1,9 @@
 import logging
 
 from azure.monitor.opentelemetry import configure_azure_monitor
-from shared.config import settings
 from opentelemetry import trace
 from opentelemetry.sdk.resources import Resource
+from shared.config import settings
 
 
 def enable_logging() -> None:
