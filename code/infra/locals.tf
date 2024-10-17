@@ -27,12 +27,12 @@ locals {
     AZURE_OPEN_AI_BASE_URL        = module.azure_open_ai.cognitive_account_endpoint
     AZURE_OPEN_AI_API_VERSION     = "2024-05-01-preview"
     AZURE_OPEN_AI_DEPLOYMENT_NAME = azurerm_cognitive_deployment.cognitive_deployment_gpt_4o.name
-    AZURE_OPEN_AI_TEMPERATURE     = data.local_file.file_system_prompt.content
+    AZURE_OPEN_AI_TEMPERATURE     = "0.0"
 
     # Newstagextraction settings
     NEWSTAGEXTRACTION_ROOT_FOLDER_NAME = "newstagextraction"
-    NEWSTAGEXTRACTION_SYSTEM_PROMPT    = ""
-    NEWSTAGEXTRACTION_USER_PROMPT      = ""
+    NEWSTAGEXTRACTION_SYSTEM_PROMPT    = data.local_file.file_system_prompt.content
+    NEWSTAGEXTRACTION_USER_PROMPT      = data.local_file.file_user_prompt.content
 
     # Storage settings
     STORAGE_DOMAIN_NAME                      = module.storage_account.storage_account_primary_blob_endpoint
