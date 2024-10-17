@@ -20,6 +20,10 @@ class Settings(BaseSettings):
         default="video", alias="STORAGE_CONTAINER_NAME", min_length=3, max_length=63
     )
 
+    # Azure AI Service config
+    AZURE_AI_SERVICE_BASE_URL: str = "https://durable-aoai001.openai.azure.com/"
+    AZURE_AI_SERVICE_API_VERSION: str = "2024-05-01-preview"
+
     # Azure Open AI config
     AZURE_OPEN_AI_BASE_URL: str = "https://durable-aoai001.openai.azure.com/"
     AZURE_OPEN_AI_API_VERSION: str = "2024-02-15-preview"
