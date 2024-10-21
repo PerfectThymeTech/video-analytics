@@ -1,11 +1,67 @@
 import logging
 import os
 import shutil
+import hashlib
+import uuid
+
 from urllib.parse import unquote
 
 import azure.durable_functions as df
 from azure.identity.aio import DefaultAzureCredential
-from azure.storage.blob.aio import BlobServiceClient
+from azure.storage.blob.aio import BlobServiceClient, BlobClient
+
+
+def get_guid(seed: str) -> str:
+    seed_hex = hashlib.md5(seed.encode("UTF-8")).hexdigest()
+    return uuid.UUID(hex=seed_hex, version=4)
+
+
+async def copy_blob(
+    storage_domain_name: str,
+    source_storage_container_name: str,
+    source_storage_blob_name: str,
+    sink_storage_container_name: str,
+    sink_storage_blob_name: str,
+    delete_source: bool = True,
+) -> None:
+    """Copy file from source blob storage container async to sink blob storage container.
+
+    storage_domain_name (str): The domain name of the storage account.
+    source_storage_container_name (str): The container name of the storage account.
+    source_storage_blob_name (str): The blob name of the storage account.
+    sink_storage_container_name (str): The container name of the storage account.
+    sink_storage_blob_name (str): The blob name of the storage account.
+    delete_source (bool): Specifies whether the source blob should be removed after the successful copy activity.
+    RETURNS (None): This function does not return a value.
+    """
+    logging.info(f"Start copying file source 'https://{storage_domain_name}/{source_storage_container_name}/{source_storage_blob_name}' to sink 'https://{storage_domain_name}/{sink_storage_container_name}/{sink_storage_blob_name}'.")
+
+    # Create credentials
+    credential = DefaultAzureCredential()
+
+    # Preprocess storage blob name
+    async with BlobServiceClient(
+        account_url=storage_domain_name,
+        credential=credential,
+    ) as blob_service_client:
+        # Create blob clients
+        source_blob_client = blob_service_client.get_blob_client(
+            container=source_storage_container_name,
+            blob=source_storage_blob_name,
+        )
+        sink_blob_client = blob_service_client.get_blob_client(
+            container=sink_storage_container_name,
+            blob=sink_storage_blob_name,
+        )
+
+        # Copy blob
+        await sink_blob_client.upload_blob_from_url(
+            source_url=source_blob_client.url,
+        )
+
+        # Delete source blob
+        if delete_source:
+            await sink_blob_client.delete_blob(delete_snapshots="include")
 
 
 async def download_blob(
