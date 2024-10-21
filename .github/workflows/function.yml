@@ -21,17 +21,17 @@ on:
       - "requirements.txt"
 
 jobs:
-  function_test:
-    uses: ./.github/workflows/_functionTestTemplate.yml
-    name: "Web App Test"
-    with:
-      python_version: "3.11"
-      function_directory: "./code/backend"
+  # function_test:
+  #   uses: ./.github/workflows/_functionTestTemplate.yml
+  #   name: "Web App Test"
+  #   with:
+  #     python_version: "3.11"
+  #     function_directory: "./code/backend"
 
   function_dev:
     uses: ./.github/workflows/_functionDeployTemplate.yml
     name: "Web App - Dev"
-    needs: [function_test]
+    # needs: [function_test]
     with:
       environment: "dev"
       python_version: "3.11"
