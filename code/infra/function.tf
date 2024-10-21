@@ -4,7 +4,7 @@ resource "azurerm_linux_function_app" "linux_function_app" {
   resource_group_name = azurerm_resource_group.resource_group.name
   tags                = var.tags
   identity {
-    type = "UserAssigned"
+    type = "SystemAssigned,UserAssigned"
     identity_ids = [
       module.user_assigned_identity.user_assigned_identity_id
     ]
