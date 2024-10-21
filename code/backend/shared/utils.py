@@ -1,14 +1,13 @@
+import hashlib
 import logging
 import os
 import shutil
-import hashlib
 import uuid
-
 from urllib.parse import unquote
 
 import azure.durable_functions as df
 from azure.identity.aio import DefaultAzureCredential
-from azure.storage.blob.aio import BlobServiceClient, BlobClient
+from azure.storage.blob.aio import BlobClient, BlobServiceClient
 
 
 def get_guid(seed: str) -> str:
@@ -34,7 +33,9 @@ async def copy_blob(
     delete_source (bool): Specifies whether the source blob should be removed after the successful copy activity.
     RETURNS (None): This function does not return a value.
     """
-    logging.info(f"Start copying file source 'https://{storage_domain_name}/{source_storage_container_name}/{source_storage_blob_name}' to sink 'https://{storage_domain_name}/{sink_storage_container_name}/{sink_storage_blob_name}'.")
+    logging.info(
+        f"Start copying file source 'https://{storage_domain_name}/{source_storage_container_name}/{source_storage_blob_name}' to sink 'https://{storage_domain_name}/{sink_storage_container_name}/{sink_storage_blob_name}'."
+    )
 
     # Create credentials
     credential = DefaultAzureCredential()

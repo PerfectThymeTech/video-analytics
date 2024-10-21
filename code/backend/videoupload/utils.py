@@ -1,7 +1,7 @@
 import logging
 import os
 
-from moviepy.editor import VideoFileClip, AudioFileClip
+from moviepy.editor import AudioFileClip, VideoFileClip
 
 
 def extract_audio_from_video(file_path: str, audio_file_name: str = "audio.wav") -> str:
@@ -28,5 +28,7 @@ def extract_audio_from_video(file_path: str, audio_file_name: str = "audio.wav")
 
     # Extract audio
     audio = video.audio
-    audio.write_audiofile(audio_file_path) #, nbytes=2, codec="pcm_s16le", bitrate="16k", ffmpeg_params=["-ac", "1"])
+    audio.write_audiofile(
+        audio_file_path
+    )  # , nbytes=2, codec="pcm_s16le", bitrate="16k", ffmpeg_params=["-ac", "1"])
     return audio_file_path

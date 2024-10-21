@@ -1,6 +1,5 @@
 import azure.functions as func
 from models.health import HeartbeatResponse
-
 from videoupload.function import bp as bp_videoupload
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
