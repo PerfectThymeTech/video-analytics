@@ -39,9 +39,10 @@ jobs:
       # Run Python Tests
       - name: Run Python Tests
         id: python_test
+        working-directory: ${{ inputs.function_directory }}
         run: |
-          pip install -r "${FUNCTION_DIRECTORY}/../../requirements.txt" -q
-          pip install -r "${FUNCTION_DIRECTORY}/requirements.txt" -q
+          pip install -r "./../../requirements.txt" -q
+          pip install -r "./requirements.txt" -q
           pytest
         env:
           FUNCTION_DIRECTORY: ${{ inputs.function_directory }}

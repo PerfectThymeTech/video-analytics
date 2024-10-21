@@ -1,3 +1,5 @@
+import pytest
+
 from shared.utils import get_guid
 
 
