@@ -19,6 +19,20 @@ def get_guid(seed: str) -> str:
     return str(uuid.UUID(hex=seed_hex, version=4))
 
 
+def get_azure_credential(managed_identity_client_id: str = None) -> DefaultAzureCredential:
+    """Creates a default azure crendetial used for authentication.
+
+    managed_identity_client_id (str): Specifies the client id of a managed identity.
+    RETURNS (str): Returns a default azure credential.
+    """
+    if managed_identity_client_id is None:
+        return DefaultAzureCredential()
+    else:
+        return DefaultAzureCredential(
+            managed_identity_client_id=managed_identity_client_id,
+        )
+
+
 async def copy_blob(
     storage_domain_name: str,
     source_storage_container_name: str,
@@ -26,6 +40,7 @@ async def copy_blob(
     sink_storage_container_name: str,
     sink_storage_blob_name: str,
     delete_source: bool = True,
+    managed_identity_client_id: str = None,
 ) -> None:
     """Copy file from source blob storage container async to sink blob storage container.
 
@@ -35,6 +50,7 @@ async def copy_blob(
     sink_storage_container_name (str): The container name of the storage account.
     sink_storage_blob_name (str): The blob name of the storage account.
     delete_source (bool): Specifies whether the source blob should be removed after the successful copy activity.
+    managed_identity_client_id (str): Specifies the managed identity client id used for auth.
     RETURNS (None): This function does not return a value.
     """
     logging.info(
@@ -42,7 +58,9 @@ async def copy_blob(
     )
 
     # Create credentials
-    credential = DefaultAzureCredential()
+    credential = get_azure_credential(
+        managed_identity_client_id=managed_identity_client_id
+    )
 
     # Preprocess storage blob name
     async with BlobServiceClient(
@@ -74,6 +92,7 @@ async def download_blob(
     storage_domain_name: str,
     storage_container_name: str,
     storage_blob_name: str,
+    managed_identity_client_id: str = None,
 ) -> str:
     """Download file from blob storage async to local storage.
 
@@ -81,6 +100,7 @@ async def download_blob(
     storage_domain_name (str): The domain name of the storage account.
     storage_container_name (str): The container name of the storage account.
     storage_blob_name (str): The blob name of the storage account.
+    managed_identity_client_id (str): Specifies the managed identity client id used for auth.
     RETURNS (str): The file path to which the file was downloaded.
     """
     logging.info(f"Start downloading file from blob storage to '{file_path}'.")
@@ -92,7 +112,9 @@ async def download_blob(
     )
 
     # Create credentials
-    credential = DefaultAzureCredential()
+    credential = get_azure_credential(
+        managed_identity_client_id=managed_identity_client_id
+    )
 
     # Create client
     blob_service_client = BlobServiceClient(
@@ -119,6 +141,7 @@ async def upload_blob(
     storage_domain_name: str,
     storage_container_name: str,
     storage_blob_name: str,
+    managed_identity_client_id: str = None,
 ) -> str:
     """Upload file to blob storage async from local storage.
 
@@ -126,6 +149,7 @@ async def upload_blob(
     storage_domain_name (str): The domain name of the storage account.
     storage_container_name (str): The container name of the storage account.
     storage_blob_name (str): The blob name of the storage account.
+    managed_identity_client_id (str): Specifies the managed identity client id used for auth.
     RETURNS (str): The url of the uploaded blob.
     """
     logging.info(f"Start uploading file '{file_path}' to blob storage.")
@@ -137,7 +161,9 @@ async def upload_blob(
     )
 
     # Create credentials
-    credential = DefaultAzureCredential()
+    credential = get_azure_credential(
+        managed_identity_client_id=managed_identity_client_id
+    )
 
     # Create client
     blob_service_client = BlobServiceClient(
@@ -164,12 +190,14 @@ async def load_blob(
     storage_container_name: str,
     storage_blob_name: str,
     encoding: str = "utf-8",
+    managed_identity_client_id: str = None,
 ) -> str:
     """Download file from blob storage async and return data.
 
     storage_domain_name (str): The domain name of the storage account.
     storage_container_name (str): The container name of the storage account.
     storage_blob_name (str): The blob name of the storage account.
+    managed_identity_client_id (str): Specifies the managed identity client id used for auth.
     RETURNS (str): The data within the file.
     """
     logging.info(f"Start downloading file from blob storage.")
@@ -181,7 +209,9 @@ async def load_blob(
     )
 
     # Create credentials
-    credential = DefaultAzureCredential()
+    credential = get_azure_credential(
+        managed_identity_client_id=managed_identity_client_id
+    )
 
     # Create client
     blob_service_client = BlobServiceClient(
@@ -207,6 +237,7 @@ async def upload_string(
     storage_domain_name: str,
     storage_container_name: str,
     storage_blob_name: str,
+    managed_identity_client_id: str = None,
 ) -> str:
     """Upload file to blob storage async from local storage.
 
@@ -214,12 +245,15 @@ async def upload_string(
     storage_domain_name (str): The domain name of the storage account.
     storage_container_name (str): The container name of the storage account.
     storage_blob_name (str): The blob name of the storage account.
+    managed_identity_client_id (str): Specifies the managed identity client id used for auth.
     RETURNS (str): The url of the uploaded blob.
     """
     logging.info(f"Start uploading string to blob storage.")
 
     # Create credentials
-    credential = DefaultAzureCredential()
+    credential = get_azure_credential(
+        managed_identity_client_id=managed_identity_client_id
+    )
 
     # Create client
     blob_service_client = BlobServiceClient(

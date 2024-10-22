@@ -2,7 +2,7 @@ import logging
 
 import httpx
 from azure.core.credentials import AccessToken
-from azure.identity.aio import DefaultAzureCredential
+from shared.utils import get_azure_credential
 
 
 class SpeechClient:
@@ -10,15 +10,18 @@ class SpeechClient:
         self,
         azure_ai_speech_base_url: str,
         azure_ai_speech_api_version: str,
+        managed_identity_client_id: str = None,
     ):
         """Initializes the speech client.
 
         azure_ai_speech_base_url (str): Specifies the base url of the ai speech service.
         azure_ai_speech_api_version (str): Specifies the api version used for the speech service.
+        managed_identity_client_id (str): Specifies the managed identity client id used for auth.
         RETURNS (None): No return values.
         """
         self.azure_ai_speech_base_url = azure_ai_speech_base_url
         self.azure_ai_speech_api_version = azure_ai_speech_api_version
+        self.managed_identity_client_id = managed_identity_client_id
 
     async def create_transcription_job(self, guid: str, blob_url: str) -> str:
         """Creates a batch transcription job for a blob file.
@@ -84,7 +87,7 @@ class SpeechClient:
         RETURNS (AccessToken): Returns the access token object.
         """
         # Generate token
-        credential = DefaultAzureCredential(
+        credential = get_azure_credential(
             managed_identity_client_id=self.managed_identity_client_id,
         )
         token = await credential.get_token(

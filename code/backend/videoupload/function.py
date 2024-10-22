@@ -37,6 +37,7 @@ async def upload_video(client: blob.BlobClient):
         storage_domain_name=f"{client.account_name}.blob.core.windows.net",
         storage_container_name=client.container_name,
         storage_blob_name=client.blob_name,
+        managed_identity_client_id=settings.MANAGED_IDENTITY_CLIENT_ID,
     )
     logging.info(f"Downloaded blob to '{result_download_blob}'.")
 
@@ -49,6 +50,7 @@ async def upload_video(client: blob.BlobClient):
         sink_storage_container_name=settings.STORAGE_CONTAINER_INTERNAL_VIDEOS_NAME,
         sink_storage_blob_name=f"{videoupload_guid}/video.{blob_file_type}",
         delete_source=True,
+        managed_identity_client_id=settings.MANAGED_IDENTITY_CLIENT_ID,
     )
 
     # Extract audio from video
@@ -66,6 +68,7 @@ async def upload_video(client: blob.BlobClient):
         storage_domain_name=f"{client.account_name}.blob.core.windows.net",
         storage_container_name=settings.STORAGE_CONTAINER_INTERNAL_VIDEOS_NAME,
         storage_blob_name=f"{videoupload_guid}/{audio_file_name}",
+        managed_identity_client_id=settings.MANAGED_IDENTITY_CLIENT_ID,
     )
 
     # Create AI Speech STT batch job
@@ -73,6 +76,7 @@ async def upload_video(client: blob.BlobClient):
     speech_client = SpeechClient(
         azure_ai_speech_base_url=settings.AZURE_AI_SPEECH_BASE_URL,
         azure_ai_speech_api_version=settings.AZURE_AI_SPEECH_API_VERSION,
+        managed_identity_client_id=settings.MANAGED_IDENTITY_CLIENT_ID,
     )
     result_create_transcription_job = speech_client.create_transcription_job(
         guid=videoupload_guid,

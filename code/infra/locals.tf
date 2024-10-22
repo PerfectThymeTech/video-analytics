@@ -28,6 +28,7 @@ locals {
     SCM_DO_BUILD_DURING_DEPLOYMENT             = "1"
     WEBSITE_OS_TYPE                            = local.service_plan_os_type
     WEBSITE_CONTENTOVERVNET                    = "1"
+    MANAGED_IDENTITY_CLIENT_ID                 = module.user_assigned_identity.user_assigned_identity_client_id
 
     # Azure ai service settings
     AZURE_AI_SERVICE_BASE_URL    = module.azure_ai_generic.cognitive_account_endpoint
