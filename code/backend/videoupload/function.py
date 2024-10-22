@@ -63,7 +63,7 @@ async def upload_video(client: blob.BlobClient):
 
     # Upload audio blob
     logging.info(f"Upload audio blob to storage.")
-    result_upload_blob = upload_blob(
+    result_upload_blob = await upload_blob(
         file_path=result_extract_audio_from_video,
         storage_domain_name=f"{client.account_name}.blob.core.windows.net",
         storage_container_name=settings.STORAGE_CONTAINER_INTERNAL_VIDEOS_NAME,
@@ -78,7 +78,7 @@ async def upload_video(client: blob.BlobClient):
         azure_ai_speech_api_version=settings.AZURE_AI_SPEECH_API_VERSION,
         managed_identity_client_id=settings.MANAGED_IDENTITY_CLIENT_ID,
     )
-    result_create_transcription_job = speech_client.create_transcription_job(
+    result_create_transcription_job = await speech_client.create_transcription_job(
         guid=videoupload_guid,
         blob_url=result_upload_blob,
     )

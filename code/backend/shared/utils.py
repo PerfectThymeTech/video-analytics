@@ -118,6 +118,10 @@ async def download_blob(
         managed_identity_client_id=managed_identity_client_id
     )
 
+    # Create directory
+    if not os.path.exists(file_path):
+        os.makedirs(file_path)
+
     # Create client
     blob_service_client = BlobServiceClient(
         f"https://{storage_domain_name}", credential=credential
