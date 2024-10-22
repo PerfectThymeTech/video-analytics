@@ -10,8 +10,13 @@ from azure.storage.blob.aio import BlobServiceClient
 
 
 def get_guid(seed: str) -> str:
+    """Generate a guid based on a string seed.
+
+    seed (str): Specifies a string used as a seed.
+    RETURNS (str): Returns a guid as string.
+    """
     seed_hex = hashlib.md5(seed.encode("UTF-8")).hexdigest()
-    return uuid.UUID(hex=seed_hex, version=4)
+    return str(uuid.UUID(hex=seed_hex, version=4))
 
 
 async def copy_blob(
