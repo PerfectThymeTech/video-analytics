@@ -20,7 +20,11 @@ locals {
     AZURE_SDK_TRACING_IMPLEMENTATION           = "opentelemetry"
     AZURE_TRACING_ENABLED                      = "true"
     AZURE_FUNCTIONS_ENVIRONMENT                = "Production"
+    AzureWebJobsSecretStorageType              = "keyvault"
+    AzureWebJobsSecretStorageKeyVaultUri       = module.key_vault.key_vault_uri
+    FUNCTIONS_WORKER_PROCESS_COUNT             = 2
     SCM_DO_BUILD_DURING_DEPLOYMENT             = "1"
+    WEBSITE_OS_TYPE                            = local.service_plan_os_type
     WEBSITE_CONTENTOVERVNET                    = "1"
 
     # Azure ai service settings
@@ -29,7 +33,7 @@ locals {
 
     # Azure AI Service config
     AZURE_AI_SPEECH_BASE_URL    = module.azure_ai_speech.cognitive_account_endpoint
-    AZURE_AI_SPEECH_API_VERSION = "v3.2-preview.1"
+    AZURE_AI_SPEECH_API_VERSION = "2024-05-15-preview"
 
     # Azure open ai app settings
     AZURE_OPEN_AI_BASE_URL        = module.azure_open_ai.cognitive_account_endpoint
@@ -90,4 +94,5 @@ locals {
   storage_account_container_internal_analysis_speech_name = "internal-analysis-speech"
   storage_account_container_internal_analysis_video_name  = "internal-analysis-video"
   storage_account_container_results_name                  = "results-newsvideos"
+  service_plan_os_type                                    = "Linux"
 }
