@@ -60,7 +60,7 @@ async def upload_video(blob_client: blob.BlobClient):
 
     # Upload audio blob
     logging.info(f"Upload audio blob to storage.")
-    _ = upload_blob(
+    result_upload_blob = upload_blob(
         file_path=result_extract_audio_from_video,
         storage_domain_name=f"{blob_client.account_name}.blob.core.windows.net",
         storage_container_name=settings.STORAGE_CONTAINER_INTERNAL_VIDEOS_NAME,
