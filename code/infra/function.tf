@@ -11,7 +11,7 @@ resource "azurerm_linux_function_app" "linux_function_app" {
   }
 
   app_settings                                   = local.function_app_settings
-  builtin_logging_enabled                        = true
+  builtin_logging_enabled                        = false
   client_certificate_enabled                     = false
   client_certificate_exclusion_paths             = ""
   client_certificate_mode                        = "Required"
@@ -21,7 +21,7 @@ resource "azurerm_linux_function_app" "linux_function_app" {
   functions_extension_version                    = "~4"
   https_only                                     = true
   key_vault_reference_identity_id                = module.user_assigned_identity.user_assigned_identity_id
-  public_network_access_enabled                  = false
+  public_network_access_enabled                  = true # false
   storage_account_name                           = module.storage_account.storage_account_name
   storage_uses_managed_identity                  = true
   service_plan_id                                = module.app_service_plan.service_plan_id
@@ -43,7 +43,7 @@ resource "azurerm_linux_function_app" "linux_function_app" {
     health_check_eviction_time_in_min = 2
     health_check_path                 = var.function_health_check_path
     http2_enabled                     = true
-    ip_restriction_default_action     = "Deny"
+    ip_restriction_default_action     = "Allow" # "Deny"
     load_balancing_mode               = "LeastRequests"
     managed_pipeline_mode             = "Integrated"
     minimum_tls_version               = "1.2"
@@ -51,7 +51,7 @@ resource "azurerm_linux_function_app" "linux_function_app" {
     remote_debugging_enabled          = false
     remote_debugging_version          = null
     runtime_scale_monitoring_enabled  = true
-    scm_ip_restriction_default_action = "Deny"
+    scm_ip_restriction_default_action = "Allow" # "Deny"
     scm_minimum_tls_version           = "1.2"
     scm_use_main_ip_restriction       = false
     use_32_bit_worker                 = false
