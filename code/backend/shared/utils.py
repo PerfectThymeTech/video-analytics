@@ -19,7 +19,9 @@ def get_guid(seed: str) -> str:
     return str(uuid.UUID(hex=seed_hex, version=4))
 
 
-def get_azure_credential(managed_identity_client_id: str = None) -> DefaultAzureCredential:
+def get_azure_credential(
+    managed_identity_client_id: str = None,
+) -> DefaultAzureCredential:
     """Creates a default azure crendetial used for authentication.
 
     managed_identity_client_id (str): Specifies the client id of a managed identity.
