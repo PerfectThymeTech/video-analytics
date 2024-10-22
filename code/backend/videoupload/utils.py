@@ -1,7 +1,7 @@
 import logging
 import os
 
-from moviepy.editor import AudioFileClip, VideoFileClip
+from moviepy.editor import VideoFileClip
 
 
 def extract_audio_from_video(file_path: str, audio_file_name: str = "audio.wav") -> str:
