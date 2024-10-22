@@ -119,8 +119,9 @@ async def download_blob(
     )
 
     # Create directory
-    if not os.path.exists(file_path):
-        os.makedirs(file_path)
+    head, _ = os.path.split(file_path)
+    if not os.path.exists(head):
+        os.makedirs(head)
 
     # Create client
     blob_service_client = BlobServiceClient(
