@@ -1,8 +1,8 @@
 import azure.functions as func
+from blobtest.function import bp as bp_blobtest
 
 # from health.function import bp as bp_health
 from videoupload.function import bp as bp_videoupload
-from blobtest.function import bp as bp_blobtest
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
 app.register_functions(bp_videoupload)
