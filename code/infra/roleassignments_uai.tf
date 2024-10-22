@@ -14,6 +14,14 @@ resource "azurerm_role_assignment" "uai_roleassignment_cognitive_services_user" 
   principal_type       = "ServicePrincipal"
 }
 
+resource "azurerm_role_assignment" "uai_roleassignment_key_vault_secrets_officer" {
+  description          = "Required for accessing and storing secrets in the key vault from the function app settings."
+  scope                = module.key_vault.key_vault_id
+  role_definition_name = "Key Vault Secrets Officer"
+  principal_id         = module.user_assigned_identity.user_assigned_identity_principal_id
+  principal_type       = "ServicePrincipal"
+}
+
 resource "azurerm_role_assignment" "uai_roleassignment_storage_blob_data_contributor" {
   description          = "Required for accessing the storage account from the ai service and read/write data."
   scope                = module.storage_account.storage_account_id

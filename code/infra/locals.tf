@@ -22,6 +22,7 @@ locals {
     AZURE_FUNCTIONS_ENVIRONMENT                = "Production"
     AzureWebJobsSecretStorageType              = "keyvault"
     AzureWebJobsSecretStorageKeyVaultUri       = module.key_vault.key_vault_uri
+    AzureWebJobsSecretStorageKeyVaultClientId  = module.user_assigned_identity.user_assigned_identity_client_id
     FUNCTIONS_WORKER_PROCESS_COUNT             = 2
     SCM_DO_BUILD_DURING_DEPLOYMENT             = "1"
     WEBSITE_OS_TYPE                            = local.service_plan_os_type

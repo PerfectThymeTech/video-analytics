@@ -20,7 +20,7 @@ resource "azurerm_linux_function_app" "linux_function_app" {
   ftp_publish_basic_authentication_enabled       = false
   functions_extension_version                    = "~4"
   https_only                                     = true
-  key_vault_reference_identity_id                = "SystemAssigned" # module.user_assigned_identity.user_assigned_identity_id
+  key_vault_reference_identity_id                = module.user_assigned_identity.user_assigned_identity_id
   public_network_access_enabled                  = false
   storage_account_name                           = module.storage_account.storage_account_name
   storage_uses_managed_identity                  = true
