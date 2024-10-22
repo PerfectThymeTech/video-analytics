@@ -75,6 +75,6 @@ async def upload_video(client: blob.BlobClient):
         azure_ai_speech_api_version=settings.AZURE_AI_SPEECH_API_VERSION,
     )
     result_create_transcription_job = speech_client.create_transcription_job(
-        guid=seed_guid,
+        guid=videoupload_guid,
         blob_url=result_upload_blob,
     )
