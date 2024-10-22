@@ -1,15 +1,12 @@
 import logging
+import os
 
 import azure.functions as func
 import azurefunctions.extensions.bindings.blob as blob
-
 from shared.config import settings
 from shared.utils import copy_blob, download_blob, get_guid, upload_blob
 from videoupload.speech import SpeechClient
 from videoupload.utils import extract_audio_from_video
-
-import os
-
 
 bp = func.Blueprint()
 
