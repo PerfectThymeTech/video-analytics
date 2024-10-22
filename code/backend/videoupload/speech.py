@@ -8,17 +8,17 @@ from azure.identity.aio import DefaultAzureCredential
 class SpeechClient:
     def __init__(
         self,
-        azure_speech_base_url: str,
-        azure_speech_api_version: str,
+        azure_ai_speech_base_url: str,
+        azure_ai_speech_api_version: str,
     ):
         """Initializes the speech client.
 
-        azure_speech_base_url (str): Specifies the base url of the ai speech service.
-        azure_speech_api_version (str): Specifies the api version used for the speech service.
+        azure_ai_speech_base_url (str): Specifies the base url of the ai speech service.
+        azure_ai_speech_api_version (str): Specifies the api version used for the speech service.
         RETURNS (None): No return values.
         """
-        self.azure_speech_base_url = azure_speech_base_url
-        self.azure_speech_api_version = azure_speech_api_version
+        self.azure_ai_speech_base_url = azure_ai_speech_base_url
+        self.azure_ai_speech_api_version = azure_ai_speech_api_version
 
     async def create_transcription_job(self, guid: str, blob_url: str) -> str:
         """Creates a batch transcription job for a blob file.
@@ -31,7 +31,7 @@ class SpeechClient:
         token = await self.__get_auth_token()
 
         # Define url
-        url = f"{self.azure_speech_base_url}/speechtotext/transcriptions:submit?api-version={self.azure_speech_api_version}"
+        url = f"{self.azure_ai_speech_base_url}/speechtotext/transcriptions:submit?api-version={self.azure_ai_speech_api_version}"
 
         # Define headers
         headers = {

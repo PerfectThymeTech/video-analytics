@@ -6,6 +6,7 @@ import azurefunctions.extensions.bindings.blob as blob
 from shared.config import settings
 from shared.utils import copy_blob, download_blob, get_guid, upload_blob
 from videoupload.utils import extract_audio_from_video
+from videoupload.speech import SpeechClient
 
 bp = func.Blueprint()
 
@@ -13,7 +14,7 @@ bp = func.Blueprint()
 @bp.function_name("VideoUpload")
 @bp.blob_trigger(
     arg_name="blob_client",
-    path=f"{settings.STORAGE_CONTAINER_UPLOAD_NAME}",
+    path="upload-newsvideos",
     connection="BlobTrigger",
     source="LogsAndContainerScan",
 )
@@ -67,5 +68,13 @@ async def upload_video(blob_client: blob.BlobClient):
         storage_blob_name=f"{videoupload_guid}/{audio_file_name}",
     )
 
-    # Trigger AI Speech STT batch job
-    # TODO
+    # Create AI Speech STT batch job
+    logging.info(f"Create AI Speech STT batch job.")
+    speech_client = SpeechClient(
+        azure_ai_speech_base_url=settings.AZURE_AI_SPEECH_BASE_URL,
+        azure_ai_speech_api_version=settings.AZURE_AI_SPEECH_API_VERSION,
+    )
+    result_create_transcription_job = speech_client.create_transcription_job(
+        guid=seed_guid,
+        blob_url=result_upload_blob,
+    )
