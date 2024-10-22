@@ -5,13 +5,13 @@ import azure.functions as func
 import azurefunctions.extensions.bindings.blob as blob
 from shared.config import settings
 from shared.utils import copy_blob, download_blob, get_guid, upload_blob
-from videoupload.utils import extract_audio_from_video
 from videoupload.speech import SpeechClient
+from videoupload.utils import extract_audio_from_video
 
 bp = func.Blueprint()
 
 
-@bp.function_name("VideoUpload")
+# @bp.function_name("VideoUpload")
 @bp.blob_trigger(
     arg_name="blob_client",
     path="upload-newsvideos",
