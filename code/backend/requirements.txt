@@ -1,8 +1,5 @@
 azure-functions~=1.21.3
-azurefunctions-extensions-bindings-blob~=1.0.0b2
 azure-identity~=1.16.0
-langchain~=0.1.16
-langchain-openai~=0.1.3
 moviepy~=1.0.3
-pydantic-settings~=2.2.1
-pydantic~=2.7.0
+pydantic-settings~=2.6.0
+pydantic~=2.9.2

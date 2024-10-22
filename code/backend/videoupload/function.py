@@ -1,7 +1,6 @@
 import logging
 
 import azure.functions as func
-import azurefunctions.extensions.bindings.blob as blob
 
 # import os
 
@@ -11,12 +10,12 @@ bp = func.Blueprint()
 
 # @bp.function_name("VideoUpload")
 @bp.blob_trigger(
-    arg_name="blob_client",
+    arg_name="blob",
     path="upload-newsvideos/{name}",
     connection="BlobTrigger",
-    source="LogsAndContainerScan",
+    # source="LogsAndContainerScan",
 )
-async def upload_video(blob_client: blob.BlobClient):
+async def upload_video(blob: func.InputStream):
     # from shared.config import settings
     # from shared.utils import copy_blob, download_blob, get_guid, upload_blob
     # from videoupload.speech import SpeechClient

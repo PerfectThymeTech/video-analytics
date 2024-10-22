@@ -36,7 +36,7 @@ resource "azurerm_linux_function_app" "linux_function_app" {
     application_insights_connection_string = module.application_insights.application_insights_connection_string
     application_insights_key               = module.application_insights.application_insights_instrumentation_key
     application_stack {
-      python_version = "3.12"
+      python_version = "3.11"
     }
     elastic_instance_minimum          = 1
     ftps_state                        = "Disabled"
