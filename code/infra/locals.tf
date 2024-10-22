@@ -46,6 +46,7 @@ locals {
     # Blob trigger settings
     BlobTrigger__blobServiceUri  = module.storage_account.storage_account_primary_blob_endpoint
     BlobTrigger__queueServiceUri = module.storage_account.storage_account_primary_queue_endpoint
+    BlobTrigger__credential      = "managedidentity"
     BlobTrigger__clientId        = module.user_assigned_identity.user_assigned_identity_client_id
 
     # Newstagextraction settings
