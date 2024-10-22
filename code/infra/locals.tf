@@ -20,6 +20,7 @@ locals {
     AZURE_SDK_TRACING_IMPLEMENTATION           = "opentelemetry"
     AZURE_TRACING_ENABLED                      = "true"
     AZURE_FUNCTIONS_ENVIRONMENT                = "Production"
+    AzureWebJobsFeatureFlags                   = "EnableWorkerIndexing"
     AzureWebJobsSecretStorageType              = "keyvault"
     AzureWebJobsSecretStorageKeyVaultUri       = module.key_vault.key_vault_uri
     AzureWebJobsSecretStorageKeyVaultClientId  = module.user_assigned_identity.user_assigned_identity_client_id
