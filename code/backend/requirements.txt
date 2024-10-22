@@ -1,6 +1,7 @@
 azure-functions~=1.21.3
 azurefunctions-extensions-bindings-blob==1.0.0b2
 azure-identity~=1.16.0
+httpx~=0.27.2
 moviepy~=1.0.3
 pydantic-settings~=2.6.0
 pydantic~=2.9.2
