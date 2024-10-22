@@ -7,7 +7,7 @@ app.register_functions(bp_videoupload)
 
 
 @app.function_name("Health")
-@app.route(route="heartbeat")
+@app.route(route="v1/heartbeat")
 @app.http_type(http_type=func.HttpMethod.GET)
 async def heartbeat(req: func.HttpRequest) -> func.HttpResponse:
     response = HeartbeatResponse(is_alive=True).model_dump_json()
