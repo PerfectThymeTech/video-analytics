@@ -9,7 +9,7 @@ import azurefunctions.extensions.bindings.blob as blob
 bp = func.Blueprint()
 
 
-# @bp.function_name("VideoUpload")
+@bp.function_name("VideoUpload")
 @bp.blob_trigger(
     arg_name="client",
     path="upload-newsvideos/{name}",
