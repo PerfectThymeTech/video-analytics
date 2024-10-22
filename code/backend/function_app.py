@@ -1,5 +1,4 @@
 import azure.functions as func
-
 from health.function import bp as bp_health
 from videoupload.function import bp as bp_videoupload
 

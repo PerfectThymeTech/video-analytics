@@ -11,7 +11,7 @@ resource "azurerm_linux_function_app" "linux_function_app" {
   }
 
   app_settings                                   = local.function_app_settings
-  builtin_logging_enabled                        = false
+  builtin_logging_enabled                        = true
   client_certificate_enabled                     = false
   client_certificate_exclusion_paths             = ""
   client_certificate_mode                        = "Required"
