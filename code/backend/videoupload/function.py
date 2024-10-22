@@ -12,15 +12,15 @@ bp = func.Blueprint()
 # @bp.function_name("VideoUpload")
 @bp.blob_trigger(
     arg_name="blob_client",
-    path="upload-newsvideos",
+    path="upload-newsvideos/{name}",
     connection="BlobTrigger",
     source="LogsAndContainerScan",
 )
 async def upload_video(blob_client: blob.BlobClient):
-    from shared.config import settings
-    from shared.utils import copy_blob, download_blob, get_guid, upload_blob
-    from videoupload.speech import SpeechClient
-    from videoupload.utils import extract_audio_from_video
+    # from shared.config import settings
+    # from shared.utils import copy_blob, download_blob, get_guid, upload_blob
+    # from videoupload.speech import SpeechClient
+    # from videoupload.utils import extract_audio_from_video
 
     logging.info("Video upload detected.")
 
