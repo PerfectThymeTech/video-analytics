@@ -42,6 +42,11 @@ locals {
     AZURE_OPEN_AI_DEPLOYMENT_NAME = azurerm_cognitive_deployment.cognitive_deployment_gpt_4o.name
     AZURE_OPEN_AI_TEMPERATURE     = "0.0"
 
+    # Blob trigger settings
+    BlobTrigger__blobServiceUri  = module.storage_account.storage_account_primary_blob_endpoint
+    BlobTrigger__queueServiceUri = module.storage_account.storage_account_primary_queue_endpoint
+    BlobTrigger__clientId        = module.user_assigned_identity.user_assigned_identity_client_id
+
     # Newstagextraction settings
     ROOT_FOLDER_NAME = "newstagextraction"
     SYSTEM_PROMPT    = data.local_file.file_system_prompt.content

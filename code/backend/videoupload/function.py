@@ -14,7 +14,7 @@ bp = func.Blueprint()
 @bp.blob_trigger(
     arg_name="blob_client",
     path=f"{settings.STORAGE_CONTAINER_UPLOAD_NAME}",
-    connection="AzureWebJobsStorage",
+    connection="BlobTrigger",
     source="LogsAndContainerScan",
 )
 async def upload_video(blob_client: blob.BlobClient):
