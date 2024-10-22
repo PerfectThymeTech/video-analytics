@@ -1,8 +1,8 @@
 import azure.functions as func
 from models.health import HeartbeatResponse
 
-
 bp = func.Blueprint()
+
 
 @bp.function_name("Health")
 @bp.route(route="v1/heartbeat")

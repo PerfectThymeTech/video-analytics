@@ -1,8 +1,9 @@
 import logging
-# import os
 
 import azure.functions as func
 import azurefunctions.extensions.bindings.blob as blob
+
+# import os
 
 
 bp = func.Blueprint()
@@ -20,7 +21,7 @@ async def upload_video(blob_client: blob.BlobClient):
     from shared.utils import copy_blob, download_blob, get_guid, upload_blob
     from videoupload.speech import SpeechClient
     from videoupload.utils import extract_audio_from_video
-    
+
     logging.info("Video upload detected.")
 
     # # Initialize

@@ -8,15 +8,12 @@
       "Host": "Information",
       "Host.Aggregator": "Information",
       "Host.Results": "Information",
-      "Host.Triggers.DurableTask": "Information",
-      "Function": "Information",
-      "DurableTask.AzureStorage": "Warning",
-      "DurableTask.Core": "Warning"
+      "Function": "Information"
     },
     "applicationInsights": {
       "samplingSettings": {
         "isEnabled": true,
-        "excludedTypes": "Request"
+        "excludedTypes": "Request;Exception"
       }
     }
   },
@@ -25,6 +22,9 @@
     "version": "[4.*, 5.0.0)"
   },
   "extensions": {
+    "http": {
+      "routePrefix": ""
+    },
     "blobs": {
       "maxDegreeOfParallelism": 4,
       "poisonBlobThreshold": 1
