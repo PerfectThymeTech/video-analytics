@@ -1,7 +1,9 @@
-import httpx
 import logging
-from azure.identity.aio import DefaultAzureCredential
+
+import httpx
 from azure.core.credentials import AccessToken
+from azure.identity.aio import DefaultAzureCredential
+
 
 class SpeechClient:
     def __init__(
@@ -17,7 +19,7 @@ class SpeechClient:
         """
         self.azure_speech_base_url = azure_speech_base_url
         self.azure_speech_api_version = azure_speech_api_version
-    
+
     async def create_transcription_job(self, guid: str, blob_url: str) -> str:
         """Creates a batch transcription job for a blob file.
 
@@ -30,33 +32,31 @@ class SpeechClient:
 
         # Define url
         url = f"{self.azure_speech_base_url}/speechtotext/transcriptions:submit?api-version={self.azure_speech_api_version}"
-        
+
         # Define headers
         headers = {
             "Accept": "*/*",
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {token.token}"
+            "Authorization": f"Bearer {token.token}",
         }
 
         # Define payload
         payload = {
             "displayName": f"{guid}",
             "description": "STT for video file",
-            "contentUrls": [
-                blob_url
-            ],
+            "contentUrls": [blob_url],
             "locale": "es-ES",
             "properties": {
                 "languageIdentification": {
                     "mode": "Single",
-                    "candidateLocales": ["en-US", "de-DE", "es-ES", "pt-PT", "fr-FR"]
+                    "candidateLocales": ["en-US", "de-DE", "es-ES", "pt-PT", "fr-FR"],
                 },
                 "diarizationEnabled": False,
                 "wordLevelTimestampsEnabled": False,
                 "displayFormWordLevelTimestampsEnabled": False,
                 "punctuationMode": "DictatedAndAutomatic",
                 "profanityFilterMode": "None",
-                "timeToLive": "PT12H"
+                "timeToLive": "PT12H",
             },
         }
 
@@ -67,12 +67,12 @@ class SpeechClient:
                 headers=headers,
                 json=payload,
             )
-        
+
         # Get transaction id
         transaction_id_url = response.json().get("self")
         transcription_id = str.split(transaction_id_url, sep="/")[-1]
         logging.debug(f"Submitted transcription job with id '{transcription_id}'")
-        
+
         return transcription_id
 
     async def get_transcription_job(self, transcription_id: str):
@@ -87,5 +87,7 @@ class SpeechClient:
         credential = DefaultAzureCredential(
             managed_identity_client_id=self.managed_identity_client_id,
         )
-        token = await credential.get_token("https://cognitiveservices.azure.com/.default")
+        token = await credential.get_token(
+            "https://cognitiveservices.azure.com/.default"
+        )
         return token
