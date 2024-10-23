@@ -8,6 +8,7 @@ from shared.utils import get_azure_credential
 class SpeechClient:
     def __init__(
         self,
+        azure_ai_speech_resource_id: str,
         azure_ai_speech_base_url: str,
         azure_ai_speech_api_version: str,
         azure_ai_speech_primary_access_key: str = None,
@@ -15,11 +16,13 @@ class SpeechClient:
     ):
         """Initializes the speech client.
 
+        azure_ai_speech_resource_id (str): Specifies the resource id of the azure ai search service.
         azure_ai_speech_base_url (str): Specifies the base url of the ai speech service.
         azure_ai_speech_api_version (str): Specifies the api version used for the speech service.
         managed_identity_client_id (str): Specifies the managed identity client id used for auth.
         RETURNS (None): No return values.
         """
+        self.azure_ai_speech_resource_id = azure_ai_speech_resource_id
         self.azure_ai_speech_primary_access_key = azure_ai_speech_primary_access_key
         self.azure_ai_speech_base_url = azure_ai_speech_base_url
         self.azure_ai_speech_api_version = azure_ai_speech_api_version
@@ -36,7 +39,7 @@ class SpeechClient:
         url = f"{self.azure_ai_speech_base_url}/speechtotext/transcriptions:submit?api-version={self.azure_ai_speech_api_version}"
 
         # Get headers
-        headers = self.__get_headers()
+        headers = await self.__get_headers()
 
         # Define payload
         payload = {
@@ -70,7 +73,7 @@ class SpeechClient:
         transaction_id_url = response.json().get("self")
         transcription_id = str.split(transaction_id_url, sep="/")[
             -1
-        ]  # transaction_id_url is None and copy fails
+        ]
         logging.debug(f"Submitted transcription job with id '{transcription_id}'")
 
         return transcription_id
@@ -103,6 +106,6 @@ class SpeechClient:
             headers = {
                 "Accept": "*/*",
                 "Content-Type": "application/json",
-                "Authorization": f"Bearer {token.token}",
+                "Authorization": f"Bearer aad#{self.azure_ai_speech_resource_id}#{token.token}",
             }
         return headers

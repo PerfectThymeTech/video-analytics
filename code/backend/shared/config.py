@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     AZURE_AI_SERVICE_API_VERSION: str = "2024-05-01-preview"
 
     # Azure AI Service config
+    AZURE_AI_SPEECH_RESOURCE_ID: str
     AZURE_AI_SPEECH_BASE_URL: str
     AZURE_AI_SPEECH_API_VERSION: str = "2024-05-15-preview"
     AZURE_AI_SPEECH_PRIMARY_ACCESS_KEY: str

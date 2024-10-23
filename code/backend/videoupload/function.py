@@ -74,6 +74,7 @@ async def upload_video(client: blob.BlobClient):
     # Create AI Speech STT batch job
     logging.info(f"Create AI Speech STT batch job.")
     speech_client = SpeechClient(
+        azure_ai_speech_resource_id=settings.AZURE_AI_SPEECH_RESOURCE_ID,
         azure_ai_speech_base_url=settings.AZURE_AI_SPEECH_BASE_URL,
         azure_ai_speech_api_version=settings.AZURE_AI_SPEECH_API_VERSION,
         azure_ai_speech_primary_access_key=settings.AZURE_AI_SPEECH_PRIMARY_ACCESS_KEY,
