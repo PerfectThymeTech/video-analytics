@@ -1,5 +1,5 @@
 import logging
-from typing import Dict
+from typing import Dict, List
 
 import httpx
 from shared.utils import get_azure_credential
@@ -68,9 +68,16 @@ class SpeechClient:
                 headers=headers,
                 json=payload,
             )
-        logging.info(
-            f"Response from batch transcription create operation: '{response.text}'"
-        )
+
+        # Check response
+        if response.status_code >= 400:
+            message = f"Failed to create batch transcription job (status code: '{response.status_code}'): '{response.text}'"
+            logging.error(message)
+            raise httpx.RequestError(message)
+        else:
+            logging.info(
+                f"Created batch transcription job (status code: '{response.status_code}'): '{response.text}'"
+            )
 
         # Get transaction id
         transaction_id_url = response.json().get("self")
@@ -81,8 +88,94 @@ class SpeechClient:
 
         return transcription_id
 
-    async def get_transcription_job(self, transcription_id: str):
-        pass
+    async def get_transcription_job_status(self, transcription_id: str) -> str:
+        """Returns the transcription job status.
+
+        transcription_id (str): Specifies the trancription job id.
+        RETURNS (str): Returns the status of the transcription job.
+        """
+        # Define url
+        url = f"{self.azure_ai_speech_base_url}/speechtotext/transcriptions/{transcription_id}?api-version={self.azure_ai_speech_api_version}"
+
+        # Get headers
+        headers = await self.__get_headers()
+
+        # Send request
+        async with httpx.AsyncClient() as client:
+            response = await client.get(
+                url=url,
+                headers=headers,
+            )
+
+        # Check response
+        if response.status_code >= 400:
+            message = f"Failed to get batch transcription job '{transcription_id}' (status code: '{response.status_code}'): '{response.text}'"
+            logging.error(
+                message,
+            )
+            raise httpx.RequestError(
+                message,
+            )
+        else:
+            logging.info(
+                f"Received batch transcription job (status code: '{response.status_code}'): '{response.text}'"
+            )
+
+        # Get status
+        status = response.json().get("status", None)
+        logging.debug(f"Status of transcription job '{transcription_id}': '{status}'")
+        return status
+
+    async def get_transcription_job_file_list(
+        self, transcription_id: str
+    ) -> List[str]:
+        """Returns the transcription job file list.
+
+        transcription_id (str): Specifies the trancription job id.
+        RETURNS (List[str]): Returns the list of file urls of the transcription job.
+        """
+        # Define url
+        sas_validity_in_seconds = 600
+        url = f"{self.azure_ai_speech_base_url}/speechtotext/transcriptions/{transcription_id}/files?sasValidityInSeconds={sas_validity_in_seconds}&api-version={self.azure_ai_speech_api_version}"
+
+        # Get headers
+        headers = await self.__get_headers()
+
+        # Send request
+        async with httpx.AsyncClient() as client:
+            response = await client.get(
+                url=url,
+                headers=headers,
+            )
+
+        # Check response
+        if response.status_code >= 400:
+            message = f"Failed to get files list of batch transcription job '{transcription_id}' (status code: '{response.status_code}'): '{response.text}'"
+            logging.error(
+                message,
+            )
+            raise httpx.RequestError(
+                message,
+            )
+        else:
+            logging.info(
+                f"Received batch transcription job files list (status code: '{response.status_code}'): '{response.text}'"
+            )
+
+        # Get files list
+        response_value = response.json().get("values", [])
+
+        # Get transcription file list
+        transcription_file_url_list = []
+        for value in response_value:
+            if value.get("kind", "") == "Transcription":
+                transcription_file_url = value.get("links", {"contentUrl": ""}).get(
+                    "contentUrl", None
+                )
+                if transcription_file_url:
+                    transcription_file_url_list.append(transcription_file_url)
+
+        return transcription_file_url_list
 
     async def __get_headers(self) -> Dict:
         """Creates the headers required for the azure ai service.
