@@ -4,7 +4,13 @@ import os
 import azure.functions as func
 import azurefunctions.extensions.bindings.blob as blob
 from shared.config import settings
-from shared.utils import copy_blob, download_blob, get_guid, upload_blob
+from shared.utils import (
+    copy_blob,
+    delete_directory,
+    download_blob,
+    get_guid,
+    upload_blob,
+)
 from videoupload.speech import SpeechClient
 from videoupload.utils import extract_audio_from_video
 
@@ -29,8 +35,9 @@ async def upload_video(client: blob.BlobClient):
 
     # Download blob to local storage async
     logging.info(f"Download video for preprocessing.")
+    download_directory_path = os.path.join(settings.HOME_DIRECTORY, videoupload_guid)
     download_file_path = os.path.join(
-        settings.HOME_DIRECTORY, videoupload_guid, f"video.{blob_file_type}"
+        download_directory_path, f"video.{blob_file_type}"
     )
     result_download_blob = await download_blob(
         file_path=download_file_path,
@@ -70,6 +77,10 @@ async def upload_video(client: blob.BlobClient):
         storage_blob_name=f"{videoupload_guid}/{audio_file_name}",
         managed_identity_client_id=settings.MANAGED_IDENTITY_CLIENT_ID,
     )
+
+    # Cleanup local files
+    logging.info(f"Cleanup local files.")
+    delete_directory(directory_path=download_directory_path)
 
     # Create AI Speech STT batch job
     logging.info(f"Create AI Speech STT batch job.")
