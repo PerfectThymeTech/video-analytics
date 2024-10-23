@@ -126,9 +126,7 @@ class SpeechClient:
         logging.debug(f"Status of transcription job '{transcription_id}': '{status}'")
         return status
 
-    async def get_transcription_job_file_list(
-        self, transcription_id: str
-    ) -> List[str]:
+    async def get_transcription_job_file_list(self, transcription_id: str) -> List[str]:
         """Returns the transcription job file list.
 
         transcription_id (str): Specifies the trancription job id.
