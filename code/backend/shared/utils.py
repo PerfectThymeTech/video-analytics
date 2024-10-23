@@ -6,7 +6,7 @@ import uuid
 from urllib.parse import unquote
 
 from azure.identity.aio import DefaultAzureCredential
-from azure.storage.blob.aio import BlobServiceClient
+from azure.storage.blob.aio import BlobLeaseClient, BlobServiceClient
 
 
 def get_guid(seed: str) -> str:
@@ -56,7 +56,7 @@ async def copy_blob(
     RETURNS (str): Returns the url of the destination blob.
     """
     logging.info(
-        f"Start copying file source 'https://{storage_domain_name}/{source_storage_container_name}/{source_storage_blob_name}' to sink 'https://{storage_domain_name}/{sink_storage_container_name}/{sink_storage_blob_name}'."
+        f"Start copying file source '{storage_domain_name}/{source_storage_container_name}/{source_storage_blob_name}' to sink '{storage_domain_name}/{sink_storage_container_name}/{sink_storage_blob_name}'."
     )
 
     # Create credentials
@@ -79,15 +79,25 @@ async def copy_blob(
             blob=sink_storage_blob_name,
         )
 
+        # Aquire lease
+        lease = BlobLeaseClient(
+            client=source_blob_client,
+        )
+        await lease.acquire(lease_duration=-1)
+
         # Copy blob
-        await sink_blob_client.upload_blob_from_url(
+        await sink_blob_client.start_copy_from_url(
             source_url=source_blob_client.url,
-            overwrite=True,
+            requires_sync=True,
         )
 
         # Delete source blob
         if delete_source:
-            await sink_blob_client.delete_blob(delete_snapshots="include")
+            await source_blob_client.delete_blob(
+                delete_snapshots="include", lease=lease
+            )
+        else:
+            await lease.release()
     return sink_blob_client.url
 
 
