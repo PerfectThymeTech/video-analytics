@@ -15,20 +15,20 @@ locals {
   # Web app locals
   app_settings_default = {
     # Configuration app settings
-    APPLICATIONINSIGHTS_CONNECTION_STRING      = module.application_insights.application_insights_connection_string
+    APPLICATIONINSIGHTS_CONNECTION_STRING = module.application_insights.application_insights_connection_string
     # ApplicationInsightsAgent_EXTENSION_VERSION = "~3"
     # AZURE_SDK_TRACING_IMPLEMENTATION           = "opentelemetry"
     # AZURE_TRACING_ENABLED                      = "true"
-    AZURE_FUNCTIONS_ENVIRONMENT                = "Production"
-    AzureWebJobsFeatureFlags                   = "EnableWorkerIndexing"
-    AzureWebJobsSecretStorageType              = "keyvault"
-    AzureWebJobsSecretStorageKeyVaultUri       = module.key_vault.key_vault_uri
-    AzureWebJobsSecretStorageKeyVaultClientId  = module.user_assigned_identity.user_assigned_identity_client_id
-    FUNCTIONS_WORKER_PROCESS_COUNT             = 2
-    SCM_DO_BUILD_DURING_DEPLOYMENT             = "1"
-    WEBSITE_OS_TYPE                            = local.service_plan_os_type
-    WEBSITE_CONTENTOVERVNET                    = "1"
-    MANAGED_IDENTITY_CLIENT_ID                 = module.user_assigned_identity.user_assigned_identity_client_id
+    AZURE_FUNCTIONS_ENVIRONMENT               = "Production"
+    AzureWebJobsFeatureFlags                  = "EnableWorkerIndexing"
+    AzureWebJobsSecretStorageType             = "keyvault"
+    AzureWebJobsSecretStorageKeyVaultUri      = module.key_vault.key_vault_uri
+    AzureWebJobsSecretStorageKeyVaultClientId = module.user_assigned_identity.user_assigned_identity_client_id
+    FUNCTIONS_WORKER_PROCESS_COUNT            = 2
+    SCM_DO_BUILD_DURING_DEPLOYMENT            = "1"
+    WEBSITE_OS_TYPE                           = local.service_plan_os_type
+    WEBSITE_CONTENTOVERVNET                   = "1"
+    MANAGED_IDENTITY_CLIENT_ID                = module.user_assigned_identity.user_assigned_identity_client_id
 
     # Azure ai service settings
     AZURE_AI_SERVICE_BASE_URL    = module.azure_ai_generic.cognitive_account_endpoint
@@ -36,7 +36,7 @@ locals {
 
     # Azure AI Service config
     AZURE_AI_SPEECH_RESOURCE_ID        = module.azure_ai_speech.cognitive_account_id
-    AZURE_AI_SPEECH_BASE_URL           = "https://${var.location}.api.cognitive.microsoft.com"
+    AZURE_AI_SPEECH_BASE_URL           = module.azure_ai_speech.cognitive_account_endpoint # "https://${var.location}.api.cognitive.microsoft.com"
     AZURE_AI_SPEECH_API_VERSION        = "2024-05-15-preview"
     AZURE_AI_SPEECH_PRIMARY_ACCESS_KEY = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.key_vault_secret_azure_ai_speech_cognitive_account_primary_access_key.id})"
 
