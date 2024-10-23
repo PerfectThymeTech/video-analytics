@@ -1,7 +1,7 @@
 import logging
+from typing import Dict
 
 import httpx
-from azure.core.credentials import AccessToken
 from shared.utils import get_azure_credential
 
 
@@ -10,6 +10,7 @@ class SpeechClient:
         self,
         azure_ai_speech_base_url: str,
         azure_ai_speech_api_version: str,
+        azure_ai_speech_primary_access_key: str = None,
         managed_identity_client_id: str = None,
     ):
         """Initializes the speech client.
@@ -19,6 +20,7 @@ class SpeechClient:
         managed_identity_client_id (str): Specifies the managed identity client id used for auth.
         RETURNS (None): No return values.
         """
+        self.azure_ai_speech_primary_access_key = azure_ai_speech_primary_access_key
         self.azure_ai_speech_base_url = azure_ai_speech_base_url
         self.azure_ai_speech_api_version = azure_ai_speech_api_version
         self.managed_identity_client_id = managed_identity_client_id
@@ -30,18 +32,11 @@ class SpeechClient:
         blob_url (str): Specifies the blob url pointing to an audio file that will be transcribed.
         RETURNS (str): Returns the transaction url of the transcription job.
         """
-        # Get token
-        token = await self.__get_auth_token()
-
         # Define url
         url = f"{self.azure_ai_speech_base_url}/speechtotext/transcriptions:submit?api-version={self.azure_ai_speech_api_version}"
 
-        # Define headers
-        headers = {
-            "Accept": "*/*",
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {token.token}",
-        }
+        # Get headers
+        headers = self.__get_headers()
 
         # Define payload
         payload = {
@@ -73,7 +68,9 @@ class SpeechClient:
 
         # Get transaction id
         transaction_id_url = response.json().get("self")
-        transcription_id = str.split(transaction_id_url, sep="/")[-1]
+        transcription_id = str.split(transaction_id_url, sep="/")[
+            -1
+        ]  # transaction_id_url is None and copy fails
         logging.debug(f"Submitted transcription job with id '{transcription_id}'")
 
         return transcription_id
@@ -81,16 +78,31 @@ class SpeechClient:
     async def get_transcription_job(self, transcription_id: str):
         pass
 
-    async def __get_auth_token(self) -> AccessToken:
-        """Creates an entra id token for an azure ai service.
+    async def __get_headers(self) -> Dict:
+        """Creates the headers required for the azure ai service.
 
-        RETURNS (AccessToken): Returns the access token object.
+        RETURNS (Dict): Headers used for the API calls.
         """
-        # Generate token
-        credential = get_azure_credential(
-            managed_identity_client_id=self.managed_identity_client_id,
-        )
-        token = await credential.get_token(
-            "https://cognitiveservices.azure.com/.default"
-        )
-        return token
+        if self.azure_ai_speech_primary_access_key:
+            # Create headers
+            headers = {
+                "Accept": "*/*",
+                "Content-Type": "application/json",
+                "Ocp-Apim-Subscription-Key": self.azure_ai_speech_primary_access_key,
+            }
+        else:
+            # Generate token
+            credential = get_azure_credential(
+                managed_identity_client_id=self.managed_identity_client_id,
+            )
+            token = await credential.get_token(
+                "https://cognitiveservices.azure.com/.default"
+            )
+
+            # Create headers
+            headers = {
+                "Accept": "*/*",
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {token.token}",
+            }
+        return headers

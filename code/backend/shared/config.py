@@ -27,8 +27,9 @@ class Settings(BaseSettings):
     AZURE_AI_SERVICE_API_VERSION: str = "2024-05-01-preview"
 
     # Azure AI Service config
-    AZURE_AI_SPEECH_BASE_URL: str = ""
-    AZURE_AI_SPEECH_API_VERSION: str = "v3.2-preview.1"
+    AZURE_AI_SPEECH_BASE_URL: str
+    AZURE_AI_SPEECH_API_VERSION: str = "2024-05-15-preview"
+    AZURE_AI_SPEECH_PRIMARY_ACCESS_KEY: str
 
     # Azure Open AI config
     AZURE_OPEN_AI_BASE_URL: str = "https://durable-aoai001.openai.azure.com/"
