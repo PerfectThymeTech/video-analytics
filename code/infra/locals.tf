@@ -16,9 +16,9 @@ locals {
   app_settings_default = {
     # Configuration app settings
     APPLICATIONINSIGHTS_CONNECTION_STRING      = module.application_insights.application_insights_connection_string
-    ApplicationInsightsAgent_EXTENSION_VERSION = "~3"
-    AZURE_SDK_TRACING_IMPLEMENTATION           = "opentelemetry"
-    AZURE_TRACING_ENABLED                      = "true"
+    # ApplicationInsightsAgent_EXTENSION_VERSION = "~3"
+    # AZURE_SDK_TRACING_IMPLEMENTATION           = "opentelemetry"
+    # AZURE_TRACING_ENABLED                      = "true"
     AZURE_FUNCTIONS_ENVIRONMENT                = "Production"
     AzureWebJobsFeatureFlags                   = "EnableWorkerIndexing"
     AzureWebJobsSecretStorageType              = "keyvault"
