@@ -68,11 +68,15 @@ class SpeechClient:
                 headers=headers,
                 json=payload,
             )
-        logging.info(f"Response from batch transcription create operation: '{response.text}'")
+        logging.info(
+            f"Response from batch transcription create operation: '{response.text}'"
+        )
 
         # Get transaction id
         transaction_id_url = response.json().get("self")
-        transcription_id = str.split(str.split(transaction_id_url, sep="/")[-1], sep="?")[0]
+        transcription_id = str.split(
+            str.split(transaction_id_url, sep="/")[-1], sep="?"
+        )[0]
         logging.debug(f"Submitted transcription job with id '{transcription_id}'")
 
         return transcription_id
