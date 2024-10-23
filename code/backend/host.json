@@ -17,11 +17,11 @@
       },
       "enableLiveMetrics": true,
       "enableDependencyTracking": true,
-      "enablePerformanceCountersCollection": true,            
+      "enablePerformanceCountersCollection": true,
       "httpAutoCollectionOptions": {
-          "enableHttpTriggerExtendedInfoCollection": true,
-          "enableW3CDistributedTracing": true,
-          "enableResponseHeaderInjection": true
+        "enableHttpTriggerExtendedInfoCollection": true,
+        "enableW3CDistributedTracing": true,
+        "enableResponseHeaderInjection": true
       }
     }
   },
