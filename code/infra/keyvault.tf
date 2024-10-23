@@ -28,3 +28,15 @@ module "key_vault" {
 #     module.key_vault.key_vault_setup_completed,
 #   ]
 # }
+
+resource "azurerm_key_vault_secret" "key_vault_secret_azure_ai_speech_cognitive_account_primary_access_key" {
+  name         = "azure-ai-speech-primary-access-key"
+  key_vault_id = module.key_vault.key_vault_id
+
+  content_type = "text/plain"
+  value        = module.azure_ai_speech.cognitive_account_primary_access_key
+
+  depends_on = [
+    module.key_vault.key_vault_setup_completed,
+  ]
+}

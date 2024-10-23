@@ -35,8 +35,9 @@ locals {
     AZURE_AI_SERVICE_API_VERSION = "2024-05-01-preview"
 
     # Azure AI Service config
-    AZURE_AI_SPEECH_BASE_URL    = module.azure_ai_speech.cognitive_account_endpoint
-    AZURE_AI_SPEECH_API_VERSION = "2024-05-15-preview"
+    AZURE_AI_SPEECH_BASE_URL           = module.azure_ai_speech.cognitive_account_endpoint
+    AZURE_AI_SPEECH_API_VERSION        = "2024-05-15-preview"
+    AZURE_AI_SPEECH_PRIMARY_ACCESS_KEY = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.key_vault_secret_azure_ai_speech_cognitive_account_primary_access_key.resource_id})"
 
     # Azure open ai app settings
     AZURE_OPEN_AI_BASE_URL        = module.azure_open_ai.cognitive_account_endpoint
