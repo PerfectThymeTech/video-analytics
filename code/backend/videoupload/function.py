@@ -43,7 +43,7 @@ async def upload_video(client: blob.BlobClient):
 
     # Copy blob from upload location
     logging.info(f"Copy blob into destination container.")
-    await copy_blob(
+    _ = await copy_blob(
         storage_domain_name=f"{client.account_name}.blob.core.windows.net",
         source_storage_container_name=client.container_name,
         source_storage_blob_name=client.blob_name,

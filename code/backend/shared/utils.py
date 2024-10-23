@@ -43,7 +43,7 @@ async def copy_blob(
     sink_storage_blob_name: str,
     delete_source: bool = True,
     managed_identity_client_id: str = None,
-) -> None:
+) -> str:
     """Copy file from source blob storage container async to sink blob storage container.
 
     storage_domain_name (str): The domain name of the storage account.
@@ -53,7 +53,7 @@ async def copy_blob(
     sink_storage_blob_name (str): The blob name of the storage account.
     delete_source (bool): Specifies whether the source blob should be removed after the successful copy activity.
     managed_identity_client_id (str): Specifies the managed identity client id used for auth.
-    RETURNS (None): This function does not return a value.
+    RETURNS (str): Returns the url of the destination blob.
     """
     logging.info(
         f"Start copying file source 'https://{storage_domain_name}/{source_storage_container_name}/{source_storage_blob_name}' to sink 'https://{storage_domain_name}/{sink_storage_container_name}/{sink_storage_blob_name}'."
@@ -82,11 +82,13 @@ async def copy_blob(
         # Copy blob
         await sink_blob_client.upload_blob_from_url(
             source_url=source_blob_client.url,
+            overwrite=True,
         )
 
         # Delete source blob
         if delete_source:
             await sink_blob_client.delete_blob(delete_snapshots="include")
+    return sink_blob_client.url
 
 
 async def download_blob(
