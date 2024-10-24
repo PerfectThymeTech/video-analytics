@@ -130,7 +130,7 @@ async def upload_video(client: blob.BlobClient):
     # Upload files to storage
     logging.info("Upload files to storage")
     for index, item in enumerate(result_get_transcription_job_file_list):
-        _ = copy_blob_from_url(
+        _ = await copy_blob_from_url(
             source_url=item,
             sink_storage_domain_name=f"{client.account_name}.blob.core.windows.net",
             sink_storage_container_name=settings.STORAGE_CONTAINER_INTERNAL_ANALYSIS_SPEECH_NAME,
