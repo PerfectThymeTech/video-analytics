@@ -1,11 +1,11 @@
 import logging
 
+from aispeechanalysis.models import InvokeLlmResponse
 from azure.identity import DefaultAzureCredential
 from langchain_core.messages import SystemMessage
 from langchain_core.output_parsers import PydanticOutputParser  # , JsonOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import AzureChatOpenAI
-from aispeechanalysis.models import InvokeLlmResponse
 from shared.config import settings
 
 

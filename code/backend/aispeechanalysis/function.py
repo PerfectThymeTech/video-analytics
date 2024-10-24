@@ -1,13 +1,12 @@
-import logging
 import json
+import logging
 
 import azure.functions as func
 import azurefunctions.extensions.bindings.blob as blob
-from shared.utils import load_blob
-from shared.config import settings
-from aispeechanalysis.utils import get_transcript
 from aispeechanalysis.llm import LlmClient
-
+from aispeechanalysis.utils import get_transcript
+from shared.config import settings
+from shared.utils import load_blob
 
 bp = func.Blueprint()
 
@@ -36,9 +35,7 @@ async def ai_speech_analysis(client: blob.BlobClient) -> func.HttpResponse:
 
     # Get transcript
     logging.info("Get transcript from Azure AI Speech content.")
-    result_get_transcript = get_transcript(
-        ai_speech_blob_json=blob_json
-    )
+    result_get_transcript = get_transcript(ai_speech_blob_json=blob_json)
 
     # Use Open AI to generate scenes
     logging.info("Use Open AI to generate scenes")
@@ -51,7 +48,11 @@ async def ai_speech_analysis(client: blob.BlobClient) -> func.HttpResponse:
     result_invoke_llm_chain = llm_client.invoke_llm_chain(
         news_content=result_get_transcript,
         news_show_details="This is a news show covering different news content.",
-        language=settings.MAIN_CONTENT_LANGUAGE
+        language=settings.MAIN_CONTENT_LANGUAGE,
     )
 
-    
+    # Get timestamps
+    # TODO
+
+    # Save result
+    # TODO

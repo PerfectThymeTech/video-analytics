@@ -44,4 +44,3 @@ class InvokeLlmResponse(BaseModel):
     @staticmethod
     def from_json(data: str):
         return InvokeLlmResponse.model_validate_json(data)
-
