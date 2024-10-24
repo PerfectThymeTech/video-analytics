@@ -45,3 +45,10 @@ resource "azurerm_role_assignment" "uai_roleassignment_storage_queue_data_contri
 #   principal_id         = module.user_assigned_identity.user_assigned_identity_principal_id
 #   principal_type       = "ServicePrincipal"
 # }
+
+# resource "azurerm_role_assignment" "uai_role_assignment_monitoring_metrics_publisher" { # Enable to rely on Entra ID-based authentication to Application Insights
+#   scope                = module.application_insights.application_insights_id
+#   role_definition_name = "Monitoring Metrics Publisher"
+#   principal_id         = module.user_assigned_identity.user_assigned_identity_principal_id
+#   principal_type       = "ServicePrincipal"
+# }
