@@ -1,7 +1,7 @@
 import logging
 
 import azure.functions as func
-from models.health import HeartbeatResponse
+from health.models import HeartbeatResponse
 
 bp = func.Blueprint()
 
