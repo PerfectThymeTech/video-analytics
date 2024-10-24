@@ -135,6 +135,7 @@ async def upload_video(client: blob.BlobClient):
             sink_storage_domain_name=f"{client.account_name}.blob.core.windows.net",
             sink_storage_container_name=settings.STORAGE_CONTAINER_INTERNAL_ANALYSIS_SPEECH_NAME,
             sink_storage_blob_name=f"{videoupload_guid}/speech{index}.json",
+            managed_identity_client_id=settings.MANAGED_IDENTITY_CLIENT_ID,
         )
 
     logging.info(f"Completed Function run '{videoupload_guid}' successfully.")
