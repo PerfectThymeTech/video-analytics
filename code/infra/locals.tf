@@ -15,10 +15,11 @@ locals {
   # Web app locals
   app_settings_default = {
     # Configuration app settings
-    APPLICATIONINSIGHTS_CONNECTION_STRING = module.application_insights.application_insights_connection_string
+    # APPLICATIONINSIGHTS_CONNECTION_STRING = module.application_insights.application_insights_connection_string
     # ApplicationInsightsAgent_EXTENSION_VERSION = "~3"
     # AZURE_SDK_TRACING_IMPLEMENTATION           = "opentelemetry"
     # AZURE_TRACING_ENABLED                      = "true"
+    # APPLICATIONINSIGHTS_AUTHENTICATION_STRING = "Authorization=AAD;ClientId=${module.user_assigned_identity.user_assigned_identity_client_id}"
     AZURE_FUNCTIONS_ENVIRONMENT               = "Production"
     AzureWebJobsFeatureFlags                  = "EnableWorkerIndexing"
     AzureWebJobsSecretStorageType             = "keyvault"
