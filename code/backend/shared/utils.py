@@ -35,6 +35,47 @@ def get_azure_credential(
         )
 
 
+async def copy_blob_from_url(
+    source_url: str,
+    sink_storage_domain_name: str,
+    sink_storage_container_name: str,
+    sink_storage_blob_name: str,
+    managed_identity_client_id: str = None,
+) -> str:
+    """Copy file from source blob storage container async to sink blob storage container.
+
+    source_url (str): The url of the source file.
+    sink_storage_domain_name (str): The domain name of the storage account to which the file will be copied.
+    sink_storage_container_name (str): The container name of the storage account.
+    sink_storage_blob_name (str): The blob name of the storage account.
+    managed_identity_client_id (str): Specifies the managed identity client id used for auth.
+    RETURNS (str): Returns the url of the destination blob.
+    """
+    logging.info(
+        f"Start copying file source '{source_url}' to sink '{sink_storage_domain_name}/{sink_storage_container_name}/{sink_storage_blob_name}'."
+    )
+
+    # Create credentials
+    credential = get_azure_credential(
+        managed_identity_client_id=managed_identity_client_id
+    )
+
+    # Copy blob file
+    async with BlobServiceClient(
+        account_url=sink_storage_domain_name,
+        credential=credential,
+    ) as blob_service_client:
+        sink_blob_client = blob_service_client.get_blob_client(
+            container=sink_storage_container_name,
+            blob=sink_storage_blob_name,
+        )
+        await sink_blob_client.upload_blob_from_url(
+            source_url=source_url, overwrite=True
+        )
+
+    return sink_blob_client.url
+
+
 async def copy_blob(
     storage_domain_name: str,
     source_storage_container_name: str,
@@ -64,7 +105,7 @@ async def copy_blob(
         managed_identity_client_id=managed_identity_client_id
     )
 
-    # Preprocess storage blob name
+    # Copy blob file
     async with BlobServiceClient(
         account_url=storage_domain_name,
         credential=credential,
