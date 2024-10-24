@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import os
 
@@ -6,6 +7,7 @@ import azurefunctions.extensions.bindings.blob as blob
 from shared.config import settings
 from shared.utils import (
     copy_blob,
+    copy_blob_from_url,
     delete_directory,
     download_blob,
     get_guid,
@@ -95,3 +97,44 @@ async def upload_video(client: blob.BlobClient):
         guid=videoupload_guid,
         blob_url=result_upload_blob,
     )
+
+    # Check AI Speech STT batch job
+    logging.info(f"Check AI Speech STT batch job.")
+    status = "Unknown"
+    while status not in ["Succeeded", "Failed", None]:
+        await asyncio.sleep(1)
+        status = await speech_client.get_transcription_job_status(
+            transcription_id=result_create_transcription_job,
+        )
+        logging.info(
+            f"Current status for transaction id '{result_create_transcription_job}' is '{status}'."
+        )
+
+    # Check final status
+    logging.info(
+        f"Check final status of batch transcription job {result_create_transcription_job}"
+    )
+    if status != "Succeeded":
+        message = f"Batch transcription job '{result_create_transcription_job}' failed."
+        logging.error(message)
+        raise Exception(message)
+
+    # Get batch transcription file list
+    logging.info("Get batch transcription file list.")
+    result_get_transcription_job_file_list = (
+        await speech_client.get_transcription_job_file_list(
+            transcription_id=result_create_transcription_job
+        )
+    )
+
+    # Upload files to storage
+    logging.info("Upload files to storage")
+    for index, item in enumerate(result_get_transcription_job_file_list):
+        _ = copy_blob_from_url(
+            source_url=item,
+            sink_storage_domain_name=f"{client.account_name}.blob.core.windows.net",
+            sink_storage_container_name=settings.STORAGE_CONTAINER_INTERNAL_ANALYSIS_SPEECH_NAME,
+            sink_storage_blob_name=f"{videoupload_guid}/speech{index}.json",
+        )
+
+    logging.info(f"Completed Function run '{videoupload_guid}' successfully.")
