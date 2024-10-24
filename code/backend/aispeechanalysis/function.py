@@ -19,7 +19,7 @@ bp = func.Blueprint()
     # source="LogsAndContainerScan",
 )
 async def ai_speech_analysis(client: blob.BlobClient) -> func.HttpResponse:
-    logging.info(f"Azure AI Speech file upload detected.")
+    logging.info("Azure AI Speech file upload detected.")
 
     # Download blob file content and convert to json
     logging.info("Download blob file content and convert to json.")
@@ -44,6 +44,7 @@ async def ai_speech_analysis(client: blob.BlobClient) -> func.HttpResponse:
         azure_open_ai_api_version=settings.AZURE_OPEN_AI_API_VERSION,
         azure_open_ai_deployment_name=settings.AZURE_OPEN_AI_DEPLOYMENT_NAME,
         azure_open_ai_temperature=settings.AZURE_OPEN_AI_TEMPERATURE,
+        managed_identity_client_id=settings.MANAGED_IDENTITY_CLIENT_ID,
     )
     result_invoke_llm_chain = llm_client.invoke_llm_chain(
         news_content=result_get_transcript,

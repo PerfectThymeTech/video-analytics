@@ -21,13 +21,24 @@ class LlmClient:
         azure_open_ai_api_version: str,
         azure_open_ai_deployment_name: str,
         azure_open_ai_temperature: float,
+        managed_identity_client_id: str = None,
     ) -> None:
+        """Initializes the llm client.
+
+        azure_open_ai_base_url (str): Specifies the base url of the azure open ai service.
+        azure_open_ai_api_version (str): Specifies the api version used for the azure open ai service.
+        azure_open_ai_deployment_name (str): Specifies the deployment name used within azure open ai service.
+        azure_open_ai_temperature (float): Specifies the temparature used for the model.
+        managed_identity_client_id (str): Specifies the managed identity client id used for auth.
+        RETURNS (None): No return values.
+        """
         # Create llm chain
         self.__create_llm_chain(
             azure_open_ai_base_url=azure_open_ai_base_url,
             azure_open_ai_api_version=azure_open_ai_api_version,
             azure_open_ai_deployment_name=azure_open_ai_deployment_name,
             azure_open_ai_temperature=azure_open_ai_temperature,
+            managed_identity_client_id=managed_identity_client_id,
         )
 
     def __create_llm_chain(
@@ -36,6 +47,7 @@ class LlmClient:
         azure_open_ai_api_version: str,
         azure_open_ai_deployment_name: str,
         azure_open_ai_temperature: float,
+        managed_identity_client_id: str,
     ) -> None:
         # Create chat prompt template
         logging.debug("Creating chat prompt template")
@@ -56,7 +68,9 @@ class LlmClient:
         logging.debug("Creating the llm")
 
         def entra_id_token_provider():
-            credential = DefaultAzureCredential()
+            credential = DefaultAzureCredential(
+                managed_identity_client_id=managed_identity_client_id,
+            )
             token = credential.get_token(
                 "https://cognitiveservices.azure.com/.default"
             ).token
