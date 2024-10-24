@@ -28,7 +28,7 @@ resource "azurerm_linux_function_app" "linux_function_app" {
   virtual_network_subnet_id                      = azapi_resource.subnet_function.id
   webdeploy_publish_basic_authentication_enabled = false
   site_config {
-    always_on                              = true
+    always_on                              = false
     api_definition_url                     = null
     api_management_api_id                  = null
     app_command_line                       = null
