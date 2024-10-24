@@ -43,7 +43,7 @@ locals {
 
     # Azure open ai app settings
     AZURE_OPEN_AI_BASE_URL        = module.azure_open_ai.cognitive_account_endpoint
-    AZURE_OPEN_AI_API_VERSION     = "2024-05-01-preview"
+    AZURE_OPEN_AI_API_VERSION     = "2024-06-01"
     AZURE_OPEN_AI_DEPLOYMENT_NAME = azurerm_cognitive_deployment.cognitive_deployment_gpt_4o.name
     AZURE_OPEN_AI_TEMPERATURE     = "0.0"
 
@@ -54,9 +54,10 @@ locals {
     BlobTrigger__clientId        = module.user_assigned_identity.user_assigned_identity_client_id
 
     # Newstagextraction settings
-    ROOT_FOLDER_NAME = "newstagextraction"
-    SYSTEM_PROMPT    = data.local_file.file_system_prompt.content
-    USER_PROMPT      = data.local_file.file_user_prompt.content
+    ROOT_FOLDER_NAME      = "newstagextraction"
+    SYSTEM_PROMPT         = data.local_file.file_system_prompt.content
+    USER_PROMPT           = data.local_file.file_user_prompt.content
+    MAIN_CONTENT_LANGUAGE = var.main_content_language
 
     # Storage settings
     STORAGE_DOMAIN_NAME                             = module.storage_account.storage_account_primary_blob_endpoint
