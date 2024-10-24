@@ -52,7 +52,7 @@ async def copy_blob_from_url(
     RETURNS (str): Returns the url of the destination blob.
     """
     logging.info(
-        f"Start copying file source '{source_url}' to sink '{sink_storage_domain_name}/{sink_storage_container_name}/{sink_storage_blob_name}'."
+        f"Start copying file source '{source_url}' to sink 'https://{sink_storage_domain_name}/{sink_storage_container_name}/{sink_storage_blob_name}'."
     )
 
     # Create credentials
@@ -62,7 +62,7 @@ async def copy_blob_from_url(
 
     # Copy blob file
     async with BlobServiceClient(
-        account_url=sink_storage_domain_name,
+        account_url=f"https://{sink_storage_domain_name}",
         credential=credential,
     ) as blob_service_client:
         sink_blob_client = blob_service_client.get_blob_client(
@@ -97,7 +97,7 @@ async def copy_blob(
     RETURNS (str): Returns the url of the destination blob.
     """
     logging.info(
-        f"Start copying file source '{storage_domain_name}/{source_storage_container_name}/{source_storage_blob_name}' to sink '{storage_domain_name}/{sink_storage_container_name}/{sink_storage_blob_name}'."
+        f"Start copying file source 'https://{storage_domain_name}/{source_storage_container_name}/{source_storage_blob_name}' to sink 'https://{storage_domain_name}/{sink_storage_container_name}/{sink_storage_blob_name}'."
     )
 
     # Create credentials
@@ -107,7 +107,7 @@ async def copy_blob(
 
     # Copy blob file
     async with BlobServiceClient(
-        account_url=storage_domain_name,
+        account_url=f"https://{storage_domain_name}",
         credential=credential,
     ) as blob_service_client:
         # Create blob clients
@@ -178,7 +178,7 @@ async def download_blob(
 
     # Create client
     blob_service_client = BlobServiceClient(
-        f"https://{storage_domain_name}", credential=credential
+        account_url=f"https://{storage_domain_name}", credential=credential
     )
     blob_client = blob_service_client.get_blob_client(
         container=storage_container_name, blob=storage_blob_name_cleansed
@@ -227,7 +227,7 @@ async def upload_blob(
 
     # Create client
     blob_service_client = BlobServiceClient(
-        f"https://{storage_domain_name}", credential=credential
+        account_url=f"https://{storage_domain_name}", credential=credential
     )
     container_client = blob_service_client.get_container_client(
         container=storage_container_name
@@ -275,7 +275,7 @@ async def load_blob(
 
     # Create client
     blob_service_client = BlobServiceClient(
-        f"https://{storage_domain_name}", credential=credential
+        account_url=f"https://{storage_domain_name}", credential=credential
     )
     blob_client = blob_service_client.get_blob_client(
         container=storage_container_name, blob=storage_blob_name_cleansed
@@ -317,7 +317,7 @@ async def upload_string(
 
     # Create client
     blob_service_client = BlobServiceClient(
-        f"https://{storage_domain_name}", credential=credential
+        account_url=f"https://{storage_domain_name}", credential=credential
     )
     container_client = blob_service_client.get_container_client(
         container=storage_container_name
