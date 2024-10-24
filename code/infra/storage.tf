@@ -14,6 +14,7 @@ module "storage_account" {
   storage_account_type                            = "StorageV2"
   storage_account_tier                            = "Standard"
   storage_account_replication_type                = "ZRS"
+  storage_account_allowed_copy_scope              = "All"
   storage_blob_change_feed_enabled                = false
   storage_blob_container_delete_retention_in_days = 7
   storage_blob_delete_retention_in_days           = 7
@@ -30,7 +31,7 @@ module "storage_account" {
   storage_nfsv3_enabled                 = false
   storage_sftp_enabled                  = false
   storage_shared_access_key_enabled     = false # Required to be set to 'true' when creating a Windows host
-  storage_container_names               = [local.storage_account_container_upload_name, local.storage_account_container_internal_videos_name, local.storage_account_container_internal_analysis_name, local.storage_account_container_results_name, ]
+  storage_container_names               = [local.storage_account_container_upload_name, local.storage_account_container_internal_videos_name, local.storage_account_container_internal_analysis_speech_name, local.storage_account_container_internal_analysis_video_name, local.storage_account_container_results_name, ]
   storage_static_website                = []
   diagnostics_configurations            = local.diagnostics_configurations
   subnet_id                             = azapi_resource.subnet_private_endpoints.id

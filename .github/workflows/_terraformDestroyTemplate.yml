@@ -81,6 +81,7 @@ jobs:
 
       # Terraform Init
       - name: Terraform Init
+        id: terraform_init
         working-directory: ${{ inputs.working_directory }}
         run: |
           terraform init -backend-config=../../config/${CONFIG}/azurerm.tfbackend
@@ -89,6 +90,7 @@ jobs:
 
       # Terraform Destroy
       - name: Terraform Destroy
+        id: terraform_destroy
         working-directory: ${{ inputs.working_directory }}
         run: |
           terraform apply -var-file="../../config/${CONFIG}/vars.tfvars" -auto-approve -input=false -destroy

@@ -1,0 +1,43 @@
+name: Function App Deployment
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "**.py"
+      - "code/backend/**"
+      - "config/**"
+      - "tests/**"
+      - "requirements.txt"
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "**.py"
+      - "code/backend/**"
+      - "config/**"
+      - "tests/**"
+      - "requirements.txt"
+
+jobs:
+  # function_test:
+  #   uses: ./.github/workflows/_functionTestTemplate.yml
+  #   name: "Web App Test"
+  #   with:
+  #     python_version: "3.11"
+  #     function_directory: "./code/backend"
+
+  function_dev:
+    uses: ./.github/workflows/_functionDeployTemplate.yml
+    name: "Web App - Dev"
+    # needs: [function_test]
+    with:
+      environment: "dev"
+      python_version: "3.11"
+      function_directory: "./code/backend"
+      function_name: "vdnlytcs-dev-app001"
+      tenant_id: "37963dd4-f4e6-40f8-a7d6-24b97919e452"
+      subscription_id: "1fdab118-1638-419a-8b12-06c9543714a0"
+    secrets:
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}

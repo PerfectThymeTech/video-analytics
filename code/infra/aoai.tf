@@ -30,7 +30,7 @@ resource "azurerm_cognitive_deployment" "cognitive_deployment_gpt_4o" {
   model {
     format  = "OpenAI"
     name    = "gpt-4o"
-    version = "2024-05-13"
+    version = "2024-08-06"
   }
   sku {
     capacity = 100
