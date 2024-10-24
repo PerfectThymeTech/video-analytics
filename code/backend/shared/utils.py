@@ -293,7 +293,7 @@ async def upload_string(
     return blob_client.url
 
 
-def delete_directory(directory_path: str) -> bool:
+def delete_directory(directory_path: str) -> None:
     """Remove local directory recursively.
 
     directory_path (str): The directory path which will be removed.
