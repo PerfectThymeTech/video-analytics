@@ -6,7 +6,7 @@ import azurefunctions.extensions.bindings.blob as blob
 from aispeechanalysis.llm import LlmClient
 from aispeechanalysis.utils import get_transcript
 from shared.config import settings
-from shared.utils import load_blob
+from shared.utils import load_blob, upload_string
 
 bp = func.Blueprint()
 
@@ -20,6 +20,10 @@ bp = func.Blueprint()
 )
 async def ai_speech_analysis(client: blob.BlobClient) -> func.HttpResponse:
     logging.info("Azure AI Speech file upload detected.")
+
+    # Initialize
+    logging.info("Initialize")
+    ai_speech_analysis_guid = str.split(client.blob_name, sep="/")[0]
 
     # Download blob file content and convert to json
     logging.info("Download blob file content and convert to json.")
@@ -55,5 +59,13 @@ async def ai_speech_analysis(client: blob.BlobClient) -> func.HttpResponse:
     # Get timestamps
     # TODO
 
-    # Save result
+    # Save results
+    logging.info("Save results")
+    _ = await upload_string(
+        data=result_invoke_llm_chain,
+        storage_domain_name=f"{client.account_name}.blob.core.windows.net",
+        storage_container_name=settings.STORAGE_CONTAINER_RESULTS_NAME,
+        storage_blob_name=f"{ai_speech_analysis_guid}/llm.json",
+        managed_identity_client_id=settings.MANAGED_IDENTITY_CLIENT_ID,
+    )
     # TODO
