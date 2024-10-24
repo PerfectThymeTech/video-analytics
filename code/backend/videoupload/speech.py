@@ -54,7 +54,7 @@ class SpeechClient:
                 },
                 "diarizationEnabled": False,
                 "wordLevelTimestampsEnabled": False,
-                "displayFormWordLevelTimestampsEnabled": False,
+                "displayFormWordLevelTimestampsEnabled": True,
                 "punctuationMode": "DictatedAndAutomatic",
                 "profanityFilterMode": "None",
                 "timeToLive": "PT12H",
