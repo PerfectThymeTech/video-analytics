@@ -61,7 +61,7 @@ def offset_and_duration_to_timedelta(timedelta_str: str) -> Tuple[str, timedelta
             break
         except ValueError as e:
             logging.warning(
-                f"Parsing offset unsuccesful with string format '{format_option}'.", e
+                f"Parsing offset unsuccesful with string format '{format_option}'.",
             )
 
     if td is None:
@@ -131,65 +131,3 @@ def get_timestamps_for_sections(result_stt: Any, result_llm: Any) -> Any:
     return {
         "sections": result,
     }
-
-
-# def get_timestamps_for_sections(result_stt: Any, result_llm: Any) -> Any:
-#     word_details = get_word_details(result_stt=result_stt)
-
-#     # Configure indexes
-#     result_llm_index = 0
-#     result_llm_item = "start"
-
-#     # Configure current item
-#     result_llm_current_words = str(
-#         result_llm[result_llm_index].get(result_llm_item, None)
-#     ).split(sep=" ")
-
-#     # Configure result
-#     result = copy.deepcopy(result_llm)
-
-#     for k, item in enumerate(result_llm):
-#         # Configure current item
-#         result_llm_current_words = str(
-#             result_llm[result_llm_index].get(result_llm_item, None)
-#         ).split(sep=" ")
-
-#         for i, item in enumerate(word_details):
-#             word_detail_display_text = item.get("displayText")
-
-#             if word_detail_display_text == result_llm_current_words[0]:
-#                 identical = [
-#                     word == word_details[i + j].get("displayText")
-#                     for j, word in enumerate(result_llm_current_words)
-#                 ]
-#                 all_identical = all(identical)
-
-#                 if all_identical:
-#                     result[result_llm_index][f"{result_llm_item}_offset"] = (
-#                         word_details[i].get("offset")
-#                         if result_llm_item == "start"
-#                         else word_details[i + len(result_llm_current_words) - 1].get(
-#                             "offset"
-#                         )
-#                     )
-
-#                     # print(word_detail_display_text)
-#                     # print(result[result_llm_index][f"{result_llm_item}_offset"])
-
-#                     # Update index
-#                     if result_llm_item == "start":
-#                         result_llm_item = "end"
-#                     else:
-#                         result_llm_index += 1
-#                         result_llm_item = "start"
-
-#                     # Update current item
-#                     if result_llm_index < len(result_llm):
-#                         result_llm_current_words = str(
-#                             result_llm[result_llm_index].get(result_llm_item, None)
-#                         ).split(sep=" ")
-#                         # print(result_llm_current_words)
-#                     else:
-#                         break
-
-#     return result
