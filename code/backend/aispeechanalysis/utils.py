@@ -76,9 +76,9 @@ def get_timestamps_for_sections(result_stt: Any, result_llm: Any) -> Any:
     word_details = get_word_details(result_stt=result_stt)
 
     # Prepare result
-    result = copy.deepcopy(result_llm)
+    result = copy.deepcopy(result_llm.get("sections", []))
 
-    for index_llm, item_llm in enumerate(result_llm):
+    for index_llm, item_llm in enumerate(result_llm.get("sections", [])):
         # Configure current item
         item_llm_current = "start"
 
@@ -128,7 +128,9 @@ def get_timestamps_for_sections(result_stt: Any, result_llm: Any) -> Any:
                         break
 
     # Return result
-    return result
+    return {
+        "sections": result,
+    }
 
 
 # def get_timestamps_for_sections(result_stt: Any, result_llm: Any) -> Any:
