@@ -6,8 +6,8 @@ import uuid
 from urllib.parse import unquote
 
 from azure.identity.aio import DefaultAzureCredential
-from azure.storage.blob.aio import BlobLeaseClient, BlobServiceClient
 from azure.storage.blob import BlobProperties
+from azure.storage.blob.aio import BlobLeaseClient, BlobServiceClient
 
 
 def get_guid(seed: str) -> str:
@@ -34,6 +34,7 @@ def get_azure_credential(
         return DefaultAzureCredential(
             managed_identity_client_id=managed_identity_client_id,
         )
+
 
 async def get_blob_properties(
     storage_domain_name: str,

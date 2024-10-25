@@ -10,9 +10,9 @@ from shared.utils import (
     copy_blob_from_url,
     delete_directory,
     download_blob,
+    get_blob_properties,
     get_guid,
     upload_blob,
-    get_blob_properties,
 )
 from videoupload.speech import SpeechClient
 from videoupload.utils import extract_audio_from_video
