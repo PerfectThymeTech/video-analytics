@@ -18,6 +18,7 @@ module "azure_ai_speech" {
     trimsuffix(trimprefix(module.storage_account.storage_account_primary_blob_endpoint, "https://"), "/"),
     trimsuffix(trimprefix(module.azure_open_ai.cognitive_account_endpoint, "https://"), "/"),
   ]
+  cognitive_account_local_auth_enabled  = true
   cognitive_account_deployments         = {}
   diagnostics_configurations            = local.diagnostics_configurations
   subnet_id                             = azapi_resource.subnet_private_endpoints.id

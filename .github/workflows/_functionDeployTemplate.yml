@@ -1,0 +1,96 @@
+name: Function App Deploy Template
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+        default: "dev"
+        description: "Specifies the environment of the deployment."
+      python_version:
+        required: true
+        type: string
+        default: "3.11"
+        description: "Specifies the python version."
+      function_directory:
+        required: true
+        type: string
+        description: "Specifies the directory of the Azure Web App."
+      function_name:
+        required: true
+        type: string
+        description: "Specifies the name of the Azure Web App."
+      tenant_id:
+        required: true
+        type: string
+        description: "Specifies the tenant id of the deployment."
+      subscription_id:
+        required: true
+        type: string
+        description: "Specifies the subscription id of the deployment."
+    secrets:
+      CLIENT_ID:
+        required: true
+        description: "Specifies the client id."
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deployment:
+    name: Function App Deploy
+    runs-on: [self-hosted]
+    continue-on-error: false
+    environment: ${{ inputs.environment }}
+    concurrency:
+      group: function-${{ inputs.function_name }}-${{ inputs.environment }}
+      cancel-in-progress: false
+
+    steps:
+      # Check Out Repository
+      - name: Check Out Repository
+        id: checkout_repository
+        uses: actions/checkout@v4
+
+      # Setup Python
+      - name: Setup Python
+        id: python_setup
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python_version }}
+          cache: "pip"
+          cache-dependency-path: |
+            ${{ inputs.function_directory }}/requirements.txt
+
+      # Install Web App Dependencies
+      - name: Resolve Web App Dependencies
+        id: function_dependencies
+        shell: bash
+        run: |
+          pushd "${WEBAPP_DIRECTORY}"
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt --target=".python_packages/lib/site-packages"
+          popd
+        env:
+          WEBAPP_DIRECTORY: ${{ inputs.function_directory }}
+
+      # Azure login
+      - name: Azure login
+        id: azure_login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.CLIENT_ID }}
+          tenant-id: ${{ inputs.tenant_id }}
+          subscription-id: ${{ inputs.subscription_id }}
+
+      # Deploy Function
+      - name: Deploy Function
+        id: function_deploy
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ inputs.function_name }}
+          package: ${{ inputs.function_directory }}
+          scm-do-build-during-deployment: true
+          enable-oryx-build: true

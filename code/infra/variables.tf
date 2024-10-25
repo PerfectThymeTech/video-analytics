@@ -62,6 +62,14 @@ variable "function_health_check_path" {
   }
 }
 
+variable "main_content_language" {
+  description = "Specifies the main content language."
+  type        = string
+  sensitive   = false
+  nullable    = false
+  default     = "de-DE"
+}
+
 # Logging variables
 variable "log_analytics_workspace_id" {
   description = "Specifies the resource ID of the log analytics workspace used for collecting logs."
