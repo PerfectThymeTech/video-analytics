@@ -123,7 +123,13 @@ def get_timestamps_for_sections(result_stt: Any, result_llm: Any) -> Any:
 
                     # Update start or end item
                     if item_llm_current == "start":
+                        # Configure new current item
                         item_llm_current = "end"
+
+                        # Get new llm item words
+                        item_llm_words = str(item_llm.get(item_llm_current, "")).split(
+                            sep=" "
+                        )
                     else:
                         break
 
