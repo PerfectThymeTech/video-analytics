@@ -4,7 +4,7 @@ import logging
 import azure.functions as func
 import azurefunctions.extensions.bindings.blob as blob
 from aispeechanalysis.llm import LlmClient
-from aispeechanalysis.utils import get_transcript
+from aispeechanalysis.utils import get_timestamps_for_sections, get_transcript
 from shared.config import settings
 from shared.utils import load_blob, upload_string
 
@@ -56,13 +56,24 @@ async def ai_speech_analysis(client: blob.BlobClient) -> func.HttpResponse:
         language=settings.MAIN_CONTENT_LANGUAGE,
     )
 
-    # Get timestamps
-    # TODO
+    # Get timestamps for news sections
+    logging.info("Get timestamps for news sections")
+    result_get_timestamps_for_sections = get_timestamps_for_sections(
+        result_stt=result_load_blob,
+        result_llm=result_invoke_llm_chain.model_dump(),
+    )
 
     # Save results
     logging.info("Save results")
     _ = await upload_string(
         data=result_invoke_llm_chain.model_dump_json(),
+        storage_domain_name=f"{client.account_name}.blob.core.windows.net",
+        storage_container_name=settings.STORAGE_CONTAINER_RESULTS_NAME,
+        storage_blob_name=f"{ai_speech_analysis_guid}/llm.json",
+        managed_identity_client_id=settings.MANAGED_IDENTITY_CLIENT_ID,
+    )
+    _ = await upload_string(
+        data=result_get_timestamps_for_sections.model_dump_json(),
         storage_domain_name=f"{client.account_name}.blob.core.windows.net",
         storage_container_name=settings.STORAGE_CONTAINER_RESULTS_NAME,
         storage_blob_name=f"{ai_speech_analysis_guid}/llm.json",
