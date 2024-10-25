@@ -104,7 +104,7 @@ def get_timestamps_for_sections(result_stt: Any, result_llm: Any) -> Any:
                     # Calculate timestamp based on start or end item
                     if item_llm_current == "start":
                         _, td_offset = offset_and_duration_to_timedelta(
-                            timedelta=index_word.get("offset")
+                            timedelta=item_word.get("offset")
                         )
                         td_sum = td_offset
                     else:
