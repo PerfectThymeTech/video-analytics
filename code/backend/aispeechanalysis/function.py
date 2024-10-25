@@ -76,7 +76,7 @@ async def ai_speech_analysis(client: blob.BlobClient) -> func.HttpResponse:
     # Save results
     logging.info("Save results")
     _ = await upload_string(
-        data=result_get_timestamps_for_sections.model_dump_json(),
+        data=json.dumps(result_get_timestamps_for_sections),
         storage_domain_name=f"{client.account_name}.blob.core.windows.net",
         storage_container_name=settings.STORAGE_CONTAINER_RESULTS_NAME,
         storage_blob_name=f"{ai_speech_analysis_guid}/timestamps.json",
