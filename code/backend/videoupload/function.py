@@ -31,7 +31,8 @@ async def upload_video(client: blob.BlobClient):
 
     # Initialize
     logging.info("Initialize")
-    seed_guid = f"{client.account_name}-{client.container_name}-{client.blob_name}"
+    blob_properties = client.get_blob_properties()
+    seed_guid = f"{client.account_name}-{client.container_name}-{client.blob_name}-{blob_properties.creation_time}-{blob_properties.size}-{blob_properties.etag}"
     videoupload_guid = get_guid(seed=seed_guid)
     blob_file_type = str.split(client.blob_name, ".")[-1]
 
