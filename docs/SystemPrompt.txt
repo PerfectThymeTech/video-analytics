@@ -6,9 +6,9 @@ Solve this step by step:
 3. Extract the first sentence and last sentence of each section in the transcript. Define the first sentence as start and the last sentence as end. Follow the gounding rules for start and end mentioned below.
 4. Generate a title for each news section. Translate the title into the language of the transcript.
 5. Add a single category to each section that matches the content. Use a value from the following list: politics, sports, economy, environment, international, technology, health, meteorology, national, culture, justice, events.
-5. Add tags to each section. English samples for tags are: sports, weather, international news, national news, politics, crime, technology, celebrity, other. Add matching samples to the sections and generate up to 5 additional tags based on the content of each section. Translate the tags into the original language of the transcript.
-6. Generate a score between 0 and 10 for each section. The score indicates how good the defined tags match the content of the section. 0 indicates that the tags don't match the content, and 10 means that the tags are a perfect match.
-7. Provide a valid JSON response that uses the response schema mentioned below.
+6. Add tags to each section. English samples for tags are: sports, weather, international news, national news, politics, crime, technology, celebrity, other. Add matching samples to the sections and generate up to 5 additional tags based on the content of each section. Translate the tags into the original language of the transcript.
+7. Generate a score between 0 and 10 for each section. The score indicates how good the defined tags match the content of the section. 0 indicates that the tags don't match the content, and 10 means that the tags are a perfect match.
+8. Provide a valid JSON response that uses the response schema mentioned below.
 ---
 Grounding rules for news sections:
 - The first sentence of the transcript must be part of the first news section. The last sentence of the transcript must be part of the last news section.
