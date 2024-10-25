@@ -12,6 +12,7 @@ from shared.utils import (
     download_blob,
     get_guid,
     upload_blob,
+    get_blob_properties,
 )
 from videoupload.speech import SpeechClient
 from videoupload.utils import extract_audio_from_video
@@ -31,7 +32,12 @@ async def upload_video(client: blob.BlobClient):
 
     # Initialize
     logging.info("Initialize")
-    blob_properties = client.get_blob_properties()
+    blob_properties = await get_blob_properties(
+        storage_domain_name=f"{client.account_name}.blob.core.windows.net",
+        storage_container_name=client.container_name,
+        storage_blob_name=client.blob_name,
+        managed_identity_client_id=settings.MANAGED_IDENTITY_CLIENT_ID,
+    )
     seed_guid = f"{client.account_name}-{client.container_name}-{client.blob_name}-{blob_properties.creation_time}-{blob_properties.size}-{blob_properties.etag}"
     videoupload_guid = get_guid(seed=seed_guid)
     blob_file_type = str.split(client.blob_name, ".")[-1]
