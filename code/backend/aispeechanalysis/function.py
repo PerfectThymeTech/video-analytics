@@ -34,12 +34,12 @@ async def ai_speech_analysis(client: blob.BlobClient) -> func.HttpResponse:
         encoding="utf-8",
         managed_identity_client_id=settings.MANAGED_IDENTITY_CLIENT_ID,
     )
-    blob_json = json.loads(result_load_blob)
-    logging.debug(f"Loaded blob content as json: '{blob_json}'")
+    result_load_blob_json = json.loads(result_load_blob)
+    logging.debug(f"Loaded blob content as json: '{result_load_blob_json}'")
 
     # Get transcript
     logging.info("Get transcript from Azure AI Speech content.")
-    result_get_transcript = get_transcript(ai_speech_blob_json=blob_json)
+    result_get_transcript = get_transcript(ai_speech_blob_json=result_load_blob_json)
 
     # Use Open AI to generate scenes
     logging.info("Use Open AI to generate scenes")
@@ -59,7 +59,7 @@ async def ai_speech_analysis(client: blob.BlobClient) -> func.HttpResponse:
     # Get timestamps for news sections
     logging.info("Get timestamps for news sections")
     result_get_timestamps_for_sections = get_timestamps_for_sections(
-        result_stt=result_load_blob,
+        result_stt=result_load_blob_json,
         result_llm=result_invoke_llm_chain.model_dump(),
     )
 
@@ -68,7 +68,7 @@ async def ai_speech_analysis(client: blob.BlobClient) -> func.HttpResponse:
     _ = await upload_string(
         data=result_invoke_llm_chain.model_dump_json(),
         storage_domain_name=f"{client.account_name}.blob.core.windows.net",
-        storage_container_name=settings.STORAGE_CONTAINER_RESULTS_NAME,
+        storage_container_name=settings.STORAGE_CONTAINER_INTERNAL_ANALYSIS_SPEECH_NAME,
         storage_blob_name=f"{ai_speech_analysis_guid}/llm.json",
         managed_identity_client_id=settings.MANAGED_IDENTITY_CLIENT_ID,
     )
