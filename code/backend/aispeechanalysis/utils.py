@@ -32,10 +32,10 @@ def get_word_details(result_stt: Any) -> List[Any]:
     return word_details
 
 
-def offset_and_duration_to_timedelta(timedelta: str) -> Tuple[str, timedelta]:
+def offset_and_duration_to_timedelta(timedelta_str: str) -> Tuple[str, timedelta]:
     """Parses offset and duration notations to a timedelta object.
 
-    timedelta (Any): Specifies the string notation of the offset or duration (e.g. 'PT24.01S', 'PT1M38.32S').
+    timedelta_str (Any): Specifies the string notation of the offset or duration (e.g. 'PT24.01S', 'PT1M38.32S').
     RETURNS (Tuple[str, timedelta]): The transcript extracted from the JSON file and the format string.
     """
     # Initialize
@@ -50,7 +50,7 @@ def offset_and_duration_to_timedelta(timedelta: str) -> Tuple[str, timedelta]:
     # Parse timdelta
     for format_option in format_options:
         try:
-            t = datetime.strptime(timedelta, format_option)
+            t = datetime.strptime(timedelta_str, format_option)
             td = timedelta(
                 hours=t.hour,
                 minutes=t.minute,
@@ -65,7 +65,7 @@ def offset_and_duration_to_timedelta(timedelta: str) -> Tuple[str, timedelta]:
             )
 
     if td is None:
-        message = f"Unable to parse offset '{timedelta}' with format options '{format_options}'"
+        message = f"Unable to parse offset '{timedelta_str}' with format options '{format_options}'"
         logging.error(message)
         raise ValueError(message)
     return (format, td)
@@ -104,17 +104,17 @@ def get_timestamps_for_sections(result_stt: Any, result_llm: Any) -> Any:
                     # Calculate timestamp based on start or end item
                     if item_llm_current == "start":
                         _, td_offset = offset_and_duration_to_timedelta(
-                            timedelta=item_word.get("offset")
+                            timedelta_str=item_word.get("offset")
                         )
                         td_sum = td_offset
                     else:
                         _, td_offset = offset_and_duration_to_timedelta(
-                            timedelta=word_details[
+                            timedelta_str=word_details[
                                 index_word + len(item_llm_words) - 1
                             ].get("offset")
                         )
                         _, td_duration = offset_and_duration_to_timedelta(
-                            timedelta=word_details[
+                            timedelta_str=word_details[
                                 index_word + len(item_llm_words) - 1
                             ].get("duration")
                         )
