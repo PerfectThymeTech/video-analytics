@@ -39,6 +39,18 @@ def get_transcript(result_stt: Any) -> str:
     return result_stt_combined_recognized_phrases[0].get("display")
 
 
+def get_locale(result_stt: Any) -> str:
+    """Returns the locale from the content from Azure AI Speech STT batch transcription.
+
+    result_stt (Any): Specifies the JSON content from Azure AI Speech STT batch transcription.
+    RETURNS (str): The locale extracted from the JSON file. Returns 'Unknown' if the property cannot be found in the JSON transcript.
+    """
+    result_stt_recognized_phrases = result_stt.get(
+        "recognizedPhrases", [{"locale": "Unknown"}]
+    )[0]
+    return result_stt_recognized_phrases.get("locale", "Unknown")
+
+
 def get_word_details(result_stt: Any, normalize_text: bool) -> List[Any]:
     """Returns all word details from a speech to text batch analysis process.
 
@@ -77,8 +89,11 @@ def offset_and_duration_to_timedelta(timedelta_str: str) -> Tuple[str, timedelta
     # Initialize
     format_options = [
         "PT%S.%fS",
+        "PT%SS",
         "PT%MM%S.%fS",
+        "PT%MM%SS",
         "PT%HH%MM%S.%fS",
+        "PT%HH%MM%SS",
     ]
     td = None
     format = None
