@@ -1,22 +1,51 @@
 import copy
 import logging
+import string
 from datetime import datetime, timedelta
 from typing import Any, List, Tuple
 
 
-def get_transcript(ai_speech_blob_json: Any) -> str:
+def remove_punctuation(text: str) -> str:
+    """Removes punctuation from text.
+
+    text (str): Specifies the text that should be altered.
+    RETURNS (str): The altered text.
+    """
+    return text.translate(str.maketrans("", "", f"{string.punctuation}¿¡"))
+
+
+def get_normalized_text(text: str) -> str:
+    """Normalizes text by removing punctuation and lowering all characters.
+
+    text (str): Specifies the text that should be altered.
+    RETURNS (str): The altered text.
+    """
+    # Replace punctuation with dot
+    text_removed_punctuation = remove_punctuation(text=text)
+
+    # Lower text
+    return text_removed_punctuation.lower()
+
+
+def get_transcript(result_stt: Any) -> str:
     """Creates and returns a transcript based on the content from Azure AI Speech STT batch transcription.
 
-    ai_speech_blob_json (Any): JSON content from Azure AI Speech STT batch transcription.
+    result_stt (Any): Specifies the JSON content from Azure AI Speech STT batch transcription.
     RETURNS (str): The transcript extracted from the JSON file.
     """
-    ai_speech_blob_json_combined_recognized_phrases = ai_speech_blob_json.get(
+    result_stt_combined_recognized_phrases = result_stt.get(
         "combinedRecognizedPhrases", [{"display": None}]
     )
-    return ai_speech_blob_json_combined_recognized_phrases[0].get("display")
+    return result_stt_combined_recognized_phrases[0].get("display")
 
 
-def get_word_details(result_stt: Any) -> List[Any]:
+def get_word_details(result_stt: Any, normalize_text: bool) -> List[Any]:
+    """Returns all word details from a speech to text batch analysis process.
+
+    result_stt (Any): Specifies the JSON content from Azure AI Speech STT batch transcription.
+    normalize_text (bool): Specifies whether the text should be normalized.
+    RETURNS (str): The altered text.
+    """
     word_details = []
     recognized_phrases = result_stt.get("recognizedPhrases", [])
 
@@ -26,8 +55,15 @@ def get_word_details(result_stt: Any) -> List[Any]:
             "displayWords", []
         )
 
-        # Append word details
-        word_details.extend(recognized_phrase_best_display_words)
+        if normalize_text:
+            for display_word in recognized_phrase_best_display_words:
+                display_word["displayText"] = get_normalized_text(
+                    text=display_word["displayText"]
+                )
+                word_details.append(display_word)
+        else:
+            # Append word details
+            word_details.extend(recognized_phrase_best_display_words)
 
     return word_details
 
@@ -72,8 +108,14 @@ def offset_and_duration_to_timedelta(timedelta_str: str) -> Tuple[str, timedelta
 
 
 def get_timestamps_for_sections(result_stt: Any, result_llm: Any) -> Any:
+    """Calculates and adds timestamps to the llm result.
+
+    result_stt (Any): Specifies the JSON content from Azure AI Speech STT batch transcription.
+    result_llm (Any): Specifies the JSON content from Azure Open AI analysis.
+    RETURNS (Any): The JSON content from Azure Open AI analysis with added timestamps for start and end.
+    """
     # Get word details from stt result
-    word_details = get_word_details(result_stt=result_stt)
+    word_details = get_word_details(result_stt=result_stt, normalize_text=True)
 
     # Prepare result
     result = copy.deepcopy(result_llm.get("sections", []))
@@ -83,7 +125,9 @@ def get_timestamps_for_sections(result_stt: Any, result_llm: Any) -> Any:
         item_llm_current = "start"
 
         # Get llm item words
-        item_llm_words = str(item_llm.get(item_llm_current, "")).split(sep=" ")
+        item_llm_words = str(
+            get_normalized_text(item_llm.get(item_llm_current, ""))
+        ).split(sep=" ")
 
         for index_word, item_word in enumerate(word_details):
             # Get display text of current word item
@@ -127,9 +171,9 @@ def get_timestamps_for_sections(result_stt: Any, result_llm: Any) -> Any:
                         item_llm_current = "end"
 
                         # Get new llm item words
-                        item_llm_words = str(item_llm.get(item_llm_current, "")).split(
-                            sep=" "
-                        )
+                        item_llm_words = str(
+                            get_normalized_text(item_llm.get(item_llm_current, ""))
+                        ).split(sep=" ")
                     else:
                         break
 

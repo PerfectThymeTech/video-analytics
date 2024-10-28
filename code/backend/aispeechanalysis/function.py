@@ -39,7 +39,7 @@ async def ai_speech_analysis(client: blob.BlobClient) -> func.HttpResponse:
 
     # Get transcript
     logging.info("Get transcript from Azure AI Speech content.")
-    result_get_transcript = get_transcript(ai_speech_blob_json=result_load_blob_json)
+    result_get_transcript = get_transcript(result_stt=result_load_blob_json)
 
     # Use Open AI to generate scenes
     logging.info("Use Open AI to generate scenes.")
