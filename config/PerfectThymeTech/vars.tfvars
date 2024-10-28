@@ -11,6 +11,7 @@ tags = {
 # Service variables
 function_app_settings      = {}
 function_health_check_path = "/api/v1/heartbeat"
+main_content_language      = "es-ES"
 
 # Logging variables
 log_analytics_workspace_id = "/subscriptions/e82c5267-9dc4-4f45-ac13-abdd5e130d27/resourceGroups/ptt-dev-logging-rg/providers/Microsoft.OperationalInsights/workspaces/ptt-dev-log001"

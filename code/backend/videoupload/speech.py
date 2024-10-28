@@ -28,11 +28,14 @@ class SpeechClient:
         self.azure_ai_speech_api_version = azure_ai_speech_api_version
         self.managed_identity_client_id = managed_identity_client_id
 
-    async def create_transcription_job(self, guid: str, blob_url: str) -> str:
+    async def create_transcription_job(
+        self, guid: str, blob_url: str, locale: str
+    ) -> str:
         """Creates a batch transcription job for a blob file.
 
         guid (str): Specifies the guid used as a name for the processing job.
         blob_url (str): Specifies the blob url pointing to an audio file that will be transcribed.
+        locale (str): Specifies the locale of the audio file (e.g. 'es-ES', 'de-DE').
         RETURNS (str): Returns the transaction url of the transcription job.
         """
         # Define url
@@ -46,7 +49,7 @@ class SpeechClient:
             "displayName": f"{guid}",
             "description": "STT for video file",
             "contentUrls": [blob_url],
-            "locale": "es-ES",
+            "locale": locale,
             "properties": {
                 "languageIdentification": {
                     "mode": "Single",
