@@ -4,7 +4,11 @@ import logging
 import azure.functions as func
 import azurefunctions.extensions.bindings.blob as blob
 from aispeechanalysis.llm import LlmClient
-from aispeechanalysis.utils import get_timestamps_for_sections, get_transcript
+from aispeechanalysis.utils import (
+    get_locale,
+    get_timestamps_for_sections,
+    get_transcript,
+)
 from shared.config import settings
 from shared.utils import load_blob, upload_string
 
@@ -37,9 +41,10 @@ async def ai_speech_analysis(client: blob.BlobClient) -> func.HttpResponse:
     result_load_blob_json = json.loads(result_load_blob)
     logging.debug(f"Loaded blob content as json: '{result_load_blob_json}'")
 
-    # Get transcript
-    logging.info("Get transcript from Azure AI Speech content.")
-    result_get_transcript = get_transcript(ai_speech_blob_json=result_load_blob_json)
+    # Get transcript and locale
+    logging.info("Get transcript and locale from Azure AI Speech content.")
+    result_get_transcript = get_transcript(result_stt=result_load_blob_json)
+    result_get_locale = get_locale(result_stt=result_load_blob_json)
 
     # Use Open AI to generate scenes
     logging.info("Use Open AI to generate scenes.")
@@ -53,7 +58,7 @@ async def ai_speech_analysis(client: blob.BlobClient) -> func.HttpResponse:
     result_invoke_llm_chain = llm_client.invoke_llm_chain(
         news_content=result_get_transcript,
         news_show_details="This is a news show covering different news content.",
-        language=settings.MAIN_CONTENT_LANGUAGE,
+        language=result_get_locale,
     )
 
     # Save llm result

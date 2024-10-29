@@ -1,3 +1,4 @@
+import asyncio
 import hashlib
 import logging
 import os
@@ -165,10 +166,18 @@ async def copy_blob(
         await lease.acquire(lease_duration=-1)
 
         # Copy blob
-        await sink_blob_client.start_copy_from_url(
+        _ = await sink_blob_client.start_copy_from_url(
             source_url=source_blob_client.url,
-            requires_sync=True,
+            requires_sync=False,
         )
+
+        # Wait for copy to finish
+        status = (await sink_blob_client.get_blob_properties()).copy.status
+        logging.info(f"Status of copy activity: {status}")
+        while status not in ["success", "failed", "aborted"]:  # "pending",
+            await asyncio.sleep(1)
+            status = (await sink_blob_client.get_blob_properties()).copy.status
+            logging.info(f"Status of copy activity: {status}")
 
         # Delete source blob
         if delete_source:

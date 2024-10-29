@@ -103,6 +103,7 @@ async def upload_video(client: blob.BlobClient):
     result_create_transcription_job = await speech_client.create_transcription_job(
         guid=videoupload_guid,
         blob_url=result_upload_blob,
+        locale=settings.MAIN_CONTENT_LANGUAGE,
     )
 
     # Check AI Speech STT batch job
